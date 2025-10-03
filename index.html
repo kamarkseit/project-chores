@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Family Chores</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+    <p>For more information about this project, please visit <a href="https://github.com/kamarkseit/Chores.git"
+            target="_blank">my GitHub page</a>.</p>
+
+    <h1>History Log</h1>
+    <p>Please see all chores completed this month.</p>
+
+    <div id="history-log">Nothing to show yet.</div>
+
+    <h2>Update My Job</h2>
+    <label for="participant-select">Choose a participant:</label>
+    <select id="participant-select">
+        <option value="">------Select------</option>
+    </select>
+
+    <div id="job-update-area"></div>
+
+
+
+
+    <script>
+        async function ensureLocalChores() {
+            const stored = localStorage.getItem("chores");
+            let parsed = [];
+
+            if (stored) {
+                try {
+                    parsed = JSON.parse(stored);
+                } catch (err) {
+                    console.error("Failed to parse stored chores:", err);
+                }
+            }
+
+            // If stored is missing or empty array, seed from original JSON
+            if (!stored || parsed.length === 0) {
+                const original = await tryFetch('data/chores.json');
+                if (original) {
+                    localStorage.setItem("chores", JSON.stringify(original));
+                    console.log("Local chores seeded from original JSON");
+                } else {
+                    console.error("Failed to fetch original JSON");
+                }
+            }
+        }
+
+
+
+        function markComplete(jobId) {
+            // Grab the Date Input Inside
+            const input = document.getElementById(`date-${jobId}`);
+            const newDate = input.value;
+            if (!newDate) {
+                alert("Please select a date.");
+                return;
+            }
+            // Grab the data from local storage
+            const stored = localStorage.getItem("chores");
+            const data = stored ? JSON.parse(stored) : [];
+            // Recalculate the nextDue date
+            const nextDue = new Date(newDate); // Convert string to Date object
+
+            // Update the values in the data
+            const updated = data.map(entry => {
+                if (entry.job_id === jobId) {
+                    entry.last_completed = newDate;
+                    entry.status = "Complete";
+                    nextDue.setDate(nextDue.getDate() + entry.interval_days); // Add interval
+                    entry.next_due = nextDue.toISOString().split("T")[0]; // Format as "YYYY-MM-DD"
+                }
+                return entry;
+            });
+            // Save updated data in local storage
+            localStorage.setItem("chores", JSON.stringify(updated));
+            alert(`Job ${jobId} updated!`);
+            console.log(localStorage)
+            console.log(newDate)
+        }
+
+        function showJobsForParticipant(data, name) {
+            const container = document.getElementById("job-update-area");
+            container.innerHTML = ""; // Clear previous
+
+            const jobs = data.filter(entry => entry.assigned_to === name);
+
+            if (jobs.length === 0) {
+                container.textContent = "No jobs assigned to " + name;
+                return;
+            }
+
+            jobs.forEach(job => {
+                const div = document.createElement("div");
+                div.innerHTML = `
+                    <p><strong>${job.job_name}</strong> (Last done: ${job.last_completed})</p>
+                    <label for="date-${job.job_id}">Mark as complete:</label>
+                    <input type="date" id="date-${job.job_id}">
+                    <button onclick="markComplete(${job.job_id})">Update</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+
+        async function tryFetch(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return await response.json();
+            } catch (err) {
+                console.error("Fetch error:", err);
+                return null;
+            }
+        }
+
+        async function pollForResults() {
+            const stored = localStorage.getItem("chores");
+            const parsed = stored ? JSON.parse(stored) : [];
+            const data = parsed;
+            console.log(data)
+
+            // Find today's date, month, and year.
+            const history_log = [];
+            const now = new Date();
+            const currentMonth = now.getMonth(); // 0-indexed: October = 9
+            const currentYear = now.getFullYear();
+
+            // History log logic.
+            data.forEach(entry => {
+                const completedDate = new Date(entry.last_completed + "T00:00:00Z");
+                console.log("Raw:", entry.last_completed, "Parsed:", completedDate);
+                if (
+                    completedDate.getMonth() === currentMonth &&
+                    completedDate.getFullYear() === currentYear
+                ) {
+                    history_log.push(`${entry.job_name} on ${entry.last_completed}`);
+                }
+            });
+            const container = document.getElementById("history-log");
+            if (history_log.length === 0) {
+                container.textContent = "No job was completed this month.";
+            } else {
+                const choreList = history_log
+                    .map(job => `<li>${job}</li>`)
+                    .join('');
+                container.innerHTML = `<ul>${choreList}</ul>`;
+            }
+
+            // Populate participant dropdown
+            const participants = [...new Set(data.map(entry => entry.assigned_to))];
+            const select = document.getElementById("participant-select");
+
+            participants.forEach(name => {
+                const option = document.createElement("option");
+                option.value = name;
+                option.textContent = name;
+                select.appendChild(option);
+            });
+
+            // Add listener to show jobs when a name is selected
+            select.addEventListener("change", () => {
+                const selected = select.value;
+                showJobsForParticipant(data, selected);
+            });
+        }
+
+        ensureLocalChores().then(() => {
+            pollForResults(); // or whatever your main logic is
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+[
+    {
+        "job_id": 1,
+        "job_name": "Vacuum 1st floor",
+        "assigned_to": "Matt",
+        "interval_days": 14,
+        "last_completed": "2025-10-02",
+        "next_due": "2025-10-02",
+        "status": "over due",
+        "days_over_due": 2
+    },
+    {
+        "job_id": 2,
+        "job_name": "Vacuum 2nd floor",
+        "assigned_to": "Kamila",
+        "interval_days": 14,
+        "last_completed": "2025-10-02",
+        "next_due": "2025-10-02",
+        "status": "over due",
+        "days_over_due": 3
+    },
+    {
+        "job_id": 3,
+        "job_name": "1st floor wash",
+        "assigned_to": "Yasmina",
+        "interval_days": 14,
+        "last_completed": "2025-10-02",
+        "next_due": "2025-10-02",
+        "status": "over due",
+        "days_over_due": 3
+    },
+    {
+        "job_id": 4,
+        "job_name": "Clean all fans",
+        "assigned_to": "Kamila",
+        "interval_days": 90,
+        "last_completed": "2025-10-02",
+        "next_due": "2025-10-02",
+        "status": "complete",
+        "days_over_due": 0
+    },
+    {
+        "job_id": 5,
+        "job_name": "Cleaning the area under the beds",
+        "assigned_to": "Matt",
+        "interval_days": 180,
+        "last_completed": "2025-10-02",
+        "next_due": "2025-10-02",
+        "status": "complete",
+        "days_over_due": 0
+    },
+    {
+        "job_id": 6,
+        "job_name": "Window cleaning",
+        "assigned_to": "Yasmina",
+        "interval_days": 120,
+        "last_completed": "2025-10-02",
+        "next_due": "2025-10-02",
+        "status": "complete",
+        "days_over_due": 0
+    },
+    {
+        "job_id": 7,
+        "job_name": "Kitchen drawers cleaning",
+        "assigned_to": "Kamila",
+        "interval_days": 180,
+        "last_completed": "2025-10-02",
+        "next_due": "2025-10-02",
+        "status": "complete",
+        "days_over_due": 0
+    }
+]
