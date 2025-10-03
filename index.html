@@ -77,11 +77,21 @@
                 }
                 return entry;
             });
-            // Save updated data in local storage
-            localStorage.setItem("chores", JSON.stringify(updated));
-            alert(`Job ${jobId} updated!`);
-            console.log(localStorage)
-            console.log(newDate)
+            // // Save updated data in local storage
+            // localStorage.setItem("chores", JSON.stringify(updated));
+            // alert(`Job ${jobId} updated!`);
+            // Send updated data to API
+            fetch('https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updated)
+            })
+                .then(response => response.json())
+                .then(data => console.log('Success:', data))
+                .catch(error => console.error('Error:', error));
+
         }
 
         function showJobsForParticipant(data, name) {
