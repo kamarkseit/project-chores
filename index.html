@@ -41,7 +41,7 @@
 
             // If stored is missing or empty array, seed from original JSON
             if (!stored || parsed.length === 0) {
-                const original = await tryFetch('data/chores.json');
+                const original = await tryFetch('https://family-chores-bucket.s3.us-east-2.amazonaws.com/chores.json');
                 if (original) {
                     localStorage.setItem("chores", JSON.stringify(original));
                     console.log("Local chores seeded from original JSON");
