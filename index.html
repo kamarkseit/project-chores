@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <p>For more information about this project, please visit <a href="https://github.com/kamarkseit/Chores.git"
+    <p>For more information about this project, please visit <a href="https://github.com/kamarkseit/project-chores.git"
             target="_blank">my GitHub page</a>.</p>
 
     <h1>History Log</h1>
@@ -81,7 +81,7 @@
             // localStorage.setItem("chores", JSON.stringify(updated));
             // alert(`Job ${jobId} updated!`);
             // Send updated data to API
-            fetch('https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod', {
+            fetch('https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod/update-json', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
