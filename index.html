@@ -28,30 +28,34 @@
 
     <script>
         async function ensureLocalChores() {
-            const stored = localStorage.getItem("chores");
-            let parsed = [];
-
-            if (stored) {
-                try {
-                    parsed = JSON.parse(stored);
-                } catch (err) {
-                    console.error("Failed to parse stored chores:", err);
-                }
+            const original = await tryFetch('https://family-chores-bucket.s3.us-east-2.amazonaws.com/chores.json');
+            if (original) {
+                localStorage.setItem("chores", JSON.stringify(original));
+                console.log("Local chores seeded from original JSON");
+            } else {
+                console.error("Failed to fetch original JSON");
             }
-
-            // If stored is missing or empty array, seed from original JSON
-            if (!stored || parsed.length === 0) {
-                const original = await tryFetch('https://family-chores-bucket.s3.us-east-2.amazonaws.com/chores.json');
-                if (original) {
-                    localStorage.setItem("chores", JSON.stringify(original));
-                    console.log("Local chores seeded from original JSON");
-                } else {
-                    console.error("Failed to fetch original JSON");
-                }
-            }
+            // Old set up to pull data from local storage first.
+            // const stored = localStorage.getItem("chores");
+            // let parsed = [];
+            // if (stored) {
+            //     try {
+            //         parsed = JSON.parse(stored);
+            //     } catch (err) {
+            //         console.error("Failed to parse stored chores:", err);
+            //     }
+            // }
+            // // If stored is missing or empty array, seed from original JSON
+            // if (!stored || parsed.length === 0) {
+            //     const original = await tryFetch('https://family-chores-bucket.s3.us-east-2.amazonaws.com/chores.json');
+            //     if (original) {
+            //         localStorage.setItem("chores", JSON.stringify(original));
+            //         console.log("Local chores seeded from original JSON");
+            //     } else {
+            //         console.error("Failed to fetch original JSON");
+            //     }
+            // }
         }
-
-
 
         function markComplete(jobId) {
             // Grab the Date Input Inside
@@ -91,7 +95,6 @@
                 .then(response => response.json())
                 .then(data => console.log('Success:', data))
                 .catch(error => console.error('Error:', error));
-
         }
 
         function showJobsForParticipant(data, name) {
@@ -116,7 +119,6 @@
                 container.appendChild(div);
             });
         }
-
 
         async function tryFetch(url) {
             try {
