@@ -131,9 +131,8 @@
 
         async function pollForResults() {
             const stored = localStorage.getItem("chores");
-            console.log(stored);
-            console.log(typeof stored);
-            const data = stored;
+            const parsed = stored ? JSON.parse(stored) : {};
+            const data = Array.isArray(parsed) ? parsed : Object.values(parsed);
             console.log(data);
             console.log(typeof data);
 
