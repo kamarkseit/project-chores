@@ -132,7 +132,7 @@
         async function pollForResults() {
             const stored = localStorage.getItem("chores");
             const parsed = stored ? JSON.parse(stored) : [];
-            const data = parsed;
+            const data = Array.isArray(parsed) ? parsed : parsed.chores || [];
             console.log(data);
             console.log(typeof data);
 
@@ -181,8 +181,9 @@
             });
         }
 
+        // Main function is here:
         ensureLocalChores().then(() => {
-            pollForResults(); // or whatever your main logic is
+            pollForResults();
         });
 
     </script>
