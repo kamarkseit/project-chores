@@ -82,8 +82,9 @@
                 return entry;
             });
             // // Save updated data in local storage
-            // localStorage.setItem("chores", JSON.stringify(updated));
-            // alert(`Job ${jobId} updated!`);
+            localStorage.setItem("chores", JSON.stringify(updated));
+            alert(`Job ${jobId} updated!`);
+            pollForResults();
             // Send updated data to API
             fetch('https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod/update-json', {
                 method: 'POST',
