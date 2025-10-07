@@ -9,6 +9,10 @@
 <body>
     <p>For more information about this project, please visit <a href="https://github.com/kamarkseit/project-chores.git"
             target="_blank">my GitHub page</a>.</p>
+    <button
+        onclick="window.location.href='https://us-east-2kycpqllvh.auth.us-east-2.amazoncognito.com/login?client_id=2u8c3k58lg83f0blfqn65vbnrf&response_type=code&scope=email+openid+phone&redirect_uri=https%3A%2F%2Fkamarkseit.github.io%2Fproject-chores%2F'">
+        Login
+    </button>
 
     <h1>History Log</h1>
     <p>Please see all chores completed this month.</p>
@@ -82,7 +86,7 @@
                 }
                 return entry;
             });
-            // // Save updated data in local storage
+            // Save updated data in local storage
             localStorage.setItem("chores", JSON.stringify(updated));
             alert(`Job ${jobId} updated!`);
             pollForResults();
