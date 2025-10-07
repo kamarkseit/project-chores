@@ -133,7 +133,8 @@
             const stored = localStorage.getItem("chores");
             const parsed = stored ? JSON.parse(stored) : [];
             const data = parsed;
-            console.log(data)
+            console.log(data);
+            console.log(typeof data);
 
             // Find today's date, month, and year.
             const history_log = [];
