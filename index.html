@@ -67,7 +67,8 @@
             }
             // Grab the data from local storage
             const stored = localStorage.getItem("chores");
-            const data = stored ? JSON.parse(stored) : [];
+            const parsed = stored ? JSON.parse(stored) : {};
+            const data = Array.isArray(parsed) ? parsed : Object.values(parsed);
             // Recalculate the nextDue date
             const nextDue = new Date(newDate); // Convert string to Date object
 
