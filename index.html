@@ -58,6 +58,7 @@
         }
         // Gets the token and fetchs json data 
         async function ensureLocalChores() {
+            localStorage.removeItem("chores");
             const token = getTokenFromUrl();
             if (token) {
                 fetchData(token);
@@ -210,7 +211,6 @@
         }
 
         // Main function is here:
-        localStorage.removeItem("chores");
         ensureLocalChores().then(() => {
             pollForResults();
         });
