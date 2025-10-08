@@ -38,7 +38,7 @@
 
         async function fetchData(token) {
             try {
-                const response = await fetch("https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod", {
+                const response = await fetch("https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod/update-json", {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${token}`
@@ -47,25 +47,27 @@
 
                 if (response.ok) {
                     const data = await response.json();
-                    document.getElementById("message").innerText = `History: ${JSON.stringify(data)}`;
-                } else if (response.status === 401) {
-                    document.getElementById("message").innerText = "Unauthorized. Please log in.";
-                } else {
-                    document.getElementById("message").innerText = "Unable to fetch data.";
+                    localStorage.setItem("chores", JSON.stringify(data));
+                    console.log("Local chores seeded from original JSON");
                 }
             } catch (err) {
-                document.getElementById("message").innerText = "Error fetching data.";
+                console.log("Error fetching data.");
             }
         }
 
         async function ensureLocalChores() {
-            const original = await tryFetch('https://family-chores-bucket.s3.us-east-2.amazonaws.com/chores.json');
-            if (original) {
-                localStorage.setItem("chores", JSON.stringify(original));
-                console.log("Local chores seeded from original JSON");
-            } else {
-                console.error("Failed to fetch original JSON");
+            const token = getTokenFromUrl();
+            if (token) {
+                fetchData(token);
+
             }
+            // const original = await tryFetch('https://family-chores-bucket.s3.us-east-2.amazonaws.com/chores.json');
+            // if (original) {
+            //     localStorage.setItem("chores", JSON.stringify(original));
+            //     console.log("Local chores seeded from original JSON");
+            // } else {
+            //     console.error("Failed to fetch original JSON");
+            // }
             // Old set up to pull data from local storage first.
             // const stored = localStorage.getItem("chores");
             // let parsed = [];
@@ -225,10 +227,6 @@
 
         // Main function is here:
         ensureLocalChores().then(() => {
-            // const token = getTokenFromUrl();
-            // if (token) {
-            //     fetchData(token);
-            // }
             pollForResults();
         });
 
