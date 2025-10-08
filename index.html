@@ -17,7 +17,7 @@
     <h1>History Log</h1>
     <p>Please see all chores completed this month.</p>
 
-    <div id="history-log">Nothing to show yet.</div>
+    <div id="history-log">Please login.</div>
 
     <h2>Update My Job</h2>
     <label for="participant-select">Choose a participant:</label>
@@ -59,7 +59,6 @@
             const token = getTokenFromUrl();
             if (token) {
                 fetchData(token);
-
             }
             // const original = await tryFetch('https://family-chores-bucket.s3.us-east-2.amazonaws.com/chores.json');
             // if (original) {
@@ -226,6 +225,7 @@
         }
 
         // Main function is here:
+        localStorage.removeItem("chores");
         ensureLocalChores().then(() => {
             pollForResults();
         });
