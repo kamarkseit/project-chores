@@ -152,14 +152,7 @@
         }
 
         async function pollForResults() {
-            let stored;
-            if (localStorage.getItem("chores")) {
-                stored = localStorage.getItem("chores");
-                console.log(stored)
-            } else {
-                console.log("chores does not exist");
-                return;
-            }
+            const stored = localStorage.getItem("chores");
             console.log(stored)
             const parsed = stored ? JSON.parse(stored) : {};
             console.log(parsed)
