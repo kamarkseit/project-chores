@@ -225,10 +225,10 @@
 
         // Main function is here:
         ensureLocalChores().then(() => {
-            const token = getTokenFromUrl();
-            if (token) {
-                fetchData(token);
-            }
+            // const token = getTokenFromUrl();
+            // if (token) {
+            //     fetchData(token);
+            // }
             pollForResults();
         });
 
