@@ -154,7 +154,9 @@
             let stored;
             if (localStorage.getItem("chores")) {
                 stored = localStorage.getItem("chores");
+                console.log(stored)
             } else {
+                console.log("chores does not exist");
                 return;
             }
             console.log(stored)
