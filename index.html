@@ -55,7 +55,7 @@
                 console.log("Error fetching data.");
             }
         }
-
+        // Gets the token and fetchs json data 
         async function ensureLocalChores() {
             const token = getTokenFromUrl();
             if (token) {
@@ -150,7 +150,12 @@
         }
 
         async function pollForResults() {
-            const stored = localStorage.getItem("chores");
+            let stored;
+            if (localStorage.getItem("chores")) {
+                stored = localStorage.getItem("chores");
+            } else {
+                return;
+            }
             console.log(stored)
             const parsed = stored ? JSON.parse(stored) : {};
             console.log(parsed)
