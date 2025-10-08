@@ -118,10 +118,17 @@
             alert(`Job ${jobId} updated!`);
             pollForResults();
             // Send updated data to API
+            const token = new URLSearchParams(window.location.hash.substring(1)).get('id_token')
+            if (!token) {
+                console.error("No token found. Please log in first.");
+                return;
+            }
+
             fetch('https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod/update-json', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(updated)
             })
