@@ -50,6 +50,7 @@
                 if (response.ok) {
                     const result = await response.json();
                     const data = result.chores;
+                    console.log("Chores loaded:", data);
                     localStorage.setItem("chores", JSON.stringify(data));
                     console.log("Local chores seeded from original JSON");
                 }
