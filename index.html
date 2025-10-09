@@ -48,7 +48,8 @@
                 });
 
                 if (response.ok) {
-                    const data = await response.json();
+                    const result = await response.json();
+                    const data = result.chores;
                     localStorage.setItem("chores", JSON.stringify(data));
                     console.log("Local chores seeded from original JSON");
                 }
