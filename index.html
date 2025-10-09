@@ -209,9 +209,12 @@
         }
 
         // Main function is here:
-        ensureLocalChores().then(() => {
-            pollForResults();
-        });
+        // ensureLocalChores().then(() => {
+        //     pollForResults();
+        // });
+        ensureLocalChores();
+        pollForResults();
+
 
     </script>
 </body>
