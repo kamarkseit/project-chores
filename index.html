@@ -54,6 +54,8 @@
                     const dataArray = Object.values(data);
                     localStorage.setItem("chores", JSON.stringify(dataArray));
                     console.log("Local chores seeded from original JSON");
+                    const storedTest = localStorage.getItem("chores");
+                    console.log(storedTest)
                 }
             } catch (err) {
                 console.log("Error fetching data.");
