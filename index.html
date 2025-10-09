@@ -56,6 +56,7 @@
                     console.log("Local chores seeded from original JSON");
                     const storedTest = localStorage.getItem("chores");
                     console.log(storedTest)
+                    pollForResults();
                 }
             } catch (err) {
                 console.log("Error fetching data.");
