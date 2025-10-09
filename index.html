@@ -208,12 +208,13 @@
             });
         }
 
-        // Main function is here:
-        // ensureLocalChores().then(() => {
-        //     pollForResults();
-        // });
-        ensureLocalChores();
-        pollForResults();
+        // Main function is here
+        async function init() {
+            await ensureLocalChores(); // Waits for all internal async work
+            pollForResults();          // Runs after chores are ensured
+        }
+        // Running the main function
+        init();
 
 
     </script>
