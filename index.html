@@ -94,8 +94,8 @@
                 if (entry.job_id === jobId) {
                     entry.last_completed = newDate;
                     entry.status = "Complete";
-                    nextDue.setDate(nextDue.getDate() + entry.interval_days); // Add interval
-                    entry.next_due = nextDue.toISOString().split("T")[0]; // Format as "YYYY-MM-DD"
+                    // nextDue.setDate(nextDue.getDate() + entry.interval_days); // Add interval
+                    // entry.next_due = nextDue.toISOString().split("T")[0]; // Format as "YYYY-MM-DD"
                 }
                 return entry;
             });
