@@ -4,28 +4,60 @@
 <head>
     <title>Family Chores</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <script src="bootstrap.bundle.min.js"></script>
 </head>
 
-<body>
-    <p>For more information about this project, please visit <a href="https://github.com/kamarkseit/project-chores.git"
-            target="_blank">my GitHub page</a>.</p>
-    <button
-        onclick="window.location.href='https://us-east-2kycpqllvh.auth.us-east-2.amazoncognito.com/login?client_id=2u8c3k58lg83f0blfqn65vbnrf&response_type=token&scope=email+openid+phone&redirect_uri=https%3A%2F%2Fkamarkseit.github.io%2Fproject-chores%2F'">
-        Login
-    </button>
 
-    <h1>History Log</h1>
-    <p>Please see all chores completed this month.</p>
 
-    <div id="history-log">Please login.</div>
 
-    <h2>Update My Job</h2>
-    <label for="participant-select">Choose a participant:</label>
-    <select id="participant-select">
-        <option value="">------Select------</option>
-    </select>
+<body class="bg-light">
+    <div class="container py-4">
 
-    <div id="job-update-area"></div>
+        <!-- Project Info -->
+        <div class="mb-4">
+            <p>
+                For more information about this project, please visit
+                <a href="https://github.com/kamarkseit/project-chores.git" target="_blank" class="link-primary">
+                    my GitHub page
+                </a>.
+            </p>
+            <button class="btn btn-primary"
+                onclick="window.location.href='https://us-east-2kycpqllvh.auth.us-east-2.amazoncognito.com/login?client_id=2u8c3k58lg83f0blfqn65vbnrf&response_type=token&scope=email+openid+phone&redirect_uri=https%3A%2F%2Fkamarkseit.github.io%2Fproject-chores%2F'">
+                Login
+            </button>
+        </div>
+
+        <!-- History Log -->
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h1 class="h4 mb-0">History Log</h1>
+            </div>
+            <div class="card-body">
+                <p class="mb-2">Please see all chores completed this month.</p>
+                <div id="history-log" class="alert alert-warning">Please login.</div>
+            </div>
+        </div>
+
+        <!-- Job Update Section -->
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h2 class="h5 mb-0">Update My Job</h2>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="participant-select" class="form-label">Choose a participant:</label>
+                    <select id="participant-select" class="form-select">
+                        <option value="">------Select------</option>
+                    </select>
+                </div>
+                <div id="job-update-area"></div>
+            </div>
+        </div>
+
+    </div>
 
 
 
