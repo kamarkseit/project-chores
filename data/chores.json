@@ -1,5 +1,5 @@
-[
-    {
+{
+    "0": {
         "job_id": 1,
         "job_name": "Vacuum 1st floor",
         "assigned_to": "Matt",
@@ -9,7 +9,7 @@
         "status": "over due",
         "days_over_due": 2
     },
-    {
+    "1": {
         "job_id": 2,
         "job_name": "Vacuum 2nd floor",
         "assigned_to": "Kamila",
@@ -19,7 +19,7 @@
         "status": "over due",
         "days_over_due": 3
     },
-    {
+    "2": {
         "job_id": 3,
         "job_name": "1st floor wash",
         "assigned_to": "Yasmina",
@@ -29,7 +29,7 @@
         "status": "over due",
         "days_over_due": 3
     },
-    {
+    "3": {
         "job_id": 4,
         "job_name": "Clean all fans",
         "assigned_to": "Kamila",
@@ -39,7 +39,7 @@
         "status": "complete",
         "days_over_due": 0
     },
-    {
+    "4": {
         "job_id": 5,
         "job_name": "Cleaning the area under the beds",
         "assigned_to": "Matt",
@@ -49,9 +49,9 @@
         "status": "complete",
         "days_over_due": 0
     },
-    {
+    "5": {
         "job_id": 6,
-        "job_name": "Window cleaning",
+        "job_name": "All windows cleaning",
         "assigned_to": "Yasmina",
         "interval_days": 120,
         "last_completed": "2025-10-02",
@@ -59,14 +59,74 @@
         "status": "complete",
         "days_over_due": 0
     },
-    {
+    "6": {
         "job_id": 7,
         "job_name": "Kitchen drawers cleaning",
         "assigned_to": "Kamila",
         "interval_days": 180,
-        "last_completed": "2025-10-02",
-        "next_due": "2025-10-02",
-        "status": "complete",
+        "last_completed": "2025-10-25",
+        "next_due": "2026-04-23",
+        "status": "Complete",
+        "days_over_due": 0
+    },
+    "7": {
+        "job_id": 8,
+        "job_name": "All bathrooms cleaning",
+        "assigned_to": "Matt",
+        "interval_days": 14,
+        "last_completed": "2025-10-25",
+        "next_due": "2026-04-23",
+        "status": "Complete",
+        "days_over_due": 0
+    },
+    "8": {
+        "job_id": 9,
+        "job_name": "Two bathtubs cleaning",
+        "assigned_to": "Yasmina",
+        "interval_days": 30,
+        "last_completed": "2025-10-25",
+        "next_due": "2026-04-23",
+        "status": "Complete",
+        "days_over_due": 0
+    },
+    "9": {
+        "job_id": 10,
+        "job_name": "Master shower cleaning",
+        "assigned_to": "Kamila",
+        "interval_days": 90,
+        "last_completed": "2025-10-25",
+        "next_due": "2026-04-23",
+        "status": "Complete",
+        "days_over_due": 0
+    },
+    "10": {
+        "job_id": 11,
+        "job_name": "Clean desks, computers, and TV",
+        "assigned_to": "Yasmina",
+        "interval_days": 90,
+        "last_completed": "2025-10-25",
+        "next_due": "2026-04-23",
+        "status": "Complete",
+        "days_over_due": 0
+    },
+    "11": {
+        "job_id": 12,
+        "job_name": "Clean garage floor",
+        "assigned_to": "Kamila",
+        "interval_days": 180,
+        "last_completed": "2025-10-25",
+        "next_due": "2026-04-23",
+        "status": "Complete",
+        "days_over_due": 0
+    },
+    "12": {
+        "job_id": 13,
+        "job_name": "Clean befind fridge, washer, dryer",
+        "assigned_to": "Matt",
+        "interval_days": 180,
+        "last_completed": "2025-10-25",
+        "next_due": "2026-04-23",
+        "status": "Complete",
         "days_over_due": 0
     }
-]
+}

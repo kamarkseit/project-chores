@@ -95,16 +95,22 @@
             }
         }
         // Gets the token and fetchs json data 
+        // async function ensureLocalChores() {
+        //     localStorage.removeItem("chores");
+        //     const token = getTokenFromUrl();
+        //     if (token) {
+        //         fetchData(token);
+        //     } else {
+        //         alert("Please login first!");
+        //         return;
+        //     }
+        // }
+        // OFFLINE USE ONLY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         async function ensureLocalChores() {
             localStorage.removeItem("chores");
-            const token = getTokenFromUrl();
-            if (token) {
-                fetchData(token);
-            } else {
-                alert("Please login first!");
-                return;
-            }
+            fetch('chores.json')
         }
+
         // Function is used to modify data and send it to S3 using API Gateway
         function markComplete(jobId) {
             // Grab the Date Input Inside
@@ -125,9 +131,10 @@
             const updated = data.map(entry => {
                 if (entry.job_id === jobId) {
                     entry.last_completed = newDate;
-                    entry.status = "Complete";
-                    // nextDue.setDate(nextDue.getDate() + entry.interval_days); // Add interval
-                    // entry.next_due = nextDue.toISOString().split("T")[0]; // Format as "YYYY-MM-DD"
+                    entry.status = "complete";
+                    nextDue.setDate(nextDue.getDate() + entry.interval_days); // Add interval
+                    entry.next_due = nextDue.toISOString().split("T")[0]; // Format as "YYYY-MM-DD"
+                    entry.days_over_due = 0;
                 }
                 return entry;
             });
