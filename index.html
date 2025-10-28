@@ -95,21 +95,21 @@
             }
         }
         // Gets the token and fetchs json data 
-        // async function ensureLocalChores() {
-        //     localStorage.removeItem("chores");
-        //     const token = getTokenFromUrl();
-        //     if (token) {
-        //         fetchData(token);
-        //     } else {
-        //         alert("Please login first!");
-        //         return;
-        //     }
-        // }
-        // OFFLINE USE ONLY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         async function ensureLocalChores() {
             localStorage.removeItem("chores");
-            fetch('chores.json')
+            const token = getTokenFromUrl();
+            if (token) {
+                fetchData(token);
+            } else {
+                alert("Please login first!");
+                return;
+            }
         }
+        // // OFFLINE USE ONLY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // async function ensureLocalChores() {
+        //     localStorage.removeItem("chores");
+        //     fetch('chores.json')
+        // }
 
         // Function is used to modify data and send it to S3 using API Gateway
         function markComplete(jobId) {
