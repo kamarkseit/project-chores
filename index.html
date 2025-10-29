@@ -265,7 +265,7 @@
                 if (
                     choreStatus === "due"
                 ) {
-                    due_log.push(`${entry.job_name} is ${entry.days_over_due} days overdue`);
+                    due_log.push(`${entry.job_name} is ${entry.days_over_due} days overdue for ${entry.assigned_to}`);
                 }
             });
             const container2 = document.getElementById("due-chores-log");
