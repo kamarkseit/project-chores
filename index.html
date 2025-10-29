@@ -34,16 +34,34 @@
 
         </div>
 
-        <!-- History Log -->
-        <div class="card mb-4">
-            <div class="card-header bg-info text-white">
-                <h1 class="h4 mb-0">History Log</h1>
+        <div class="row">
+            <!-- History Log -->
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h1 class="h4 mb-0">History Log</h1>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-2">Please see all chores completed this month.</p>
+                        <div id="history-log" class="alert alert-warning">Please login.</div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <p class="mb-2">Please see all chores completed this month.</p>
-                <div id="history-log" class="alert alert-warning">Please login.</div>
+
+            <!-- Due Chores Log -->
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-danger text-white">
+                        <h1 class="h4 mb-0">Due Chores</h1>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-2">These chores are currently due or overdue.</p>
+                        <div id="due-chores-log" class="alert alert-warning">Please login.</div>
+                    </div>
+                </div>
             </div>
         </div>
+
 
         <!-- Job Update Section -->
         <div class="card">
@@ -215,15 +233,14 @@
             const data = Array.isArray(parsed) ? parsed : Object.values(parsed);
 
             // Find today's date, month, and year.
-            const history_log = [];
             const now = new Date();
             const currentMonth = now.getMonth(); // 0-indexed: October = 9
             const currentYear = now.getFullYear();
 
-            // History log logic.
+            // History log logic
+            const history_log = [];
             data.forEach(entry => {
                 const completedDate = new Date(entry.last_completed + "T00:00:00Z");
-                console.log("Raw:", entry.last_completed, "Parsed:", completedDate);
                 if (
                     completedDate.getMonth() === currentMonth &&
                     completedDate.getFullYear() === currentYear
@@ -239,6 +256,26 @@
                     .map(job => `<li>${job}</li>`)
                     .join('');
                 container.innerHTML = `<ul>${choreList}</ul>`;
+            }
+
+            // Due Chores log logic
+            const due_log = [];
+            data.forEach(entry => {
+                const choreStatus = new entry.status;
+                if (
+                    choreStatus === "due"
+                ) {
+                    due_log.push(`${entry.job_name} is ${entry.days_over_due} days overdue`);
+                }
+            });
+            const container2 = document.getElementById("due-chores-log");
+            if (due_log.length === 0) {
+                container2.textContent = "No jobs are due today.";
+            } else {
+                const dueChoreList = due_log
+                    .map(job => `<li>${job}</li>`)
+                    .join('');
+                container2.innerHTML = `<ul>${dueChoreList}</ul>`;
             }
 
             // Populate participant dropdown
@@ -272,8 +309,6 @@
                 window.location.href = 'https://kamarkseit.github.io/project-chores/';
             });
         }
-
-
         // Running the main function
         init();
 
