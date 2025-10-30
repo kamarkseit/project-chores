@@ -1,1 +1,200 @@
-{"0":{"job_id":1,"job_name":"Vacuum 1st floor","assigned_to":"Matt","interval_days":14,"last_completed":"2025-10-01","next_due":"2025-10-15","status":"due","days_over_due":13},"1":{"job_id":2,"job_name":"Vacuum 2nd floor","assigned_to":"Kamila","interval_days":14,"last_completed":"2025-10-02","next_due":"2025-10-16","status":"complete","days_over_due":0},"2":{"job_id":3,"job_name":"1st floor wash","assigned_to":"Yasmina","interval_days":14,"last_completed":"2025-10-02","next_due":"2025-10-16","status":"complete","days_over_due":0},"3":{"job_id":4,"job_name":"Clean all fans","assigned_to":"Kamila","interval_days":90,"last_completed":"2025-10-02","next_due":"2025-12-31","status":"complete","days_over_due":0},"4":{"job_id":5,"job_name":"Cleaning the area under the beds","assigned_to":"Matt","interval_days":180,"last_completed":"2025-10-02","next_due":"2026-03-31","status":"complete","days_over_due":0},"5":{"job_id":6,"job_name":"All windows cleaning","assigned_to":"Yasmina","interval_days":120,"last_completed":"2025-10-02","next_due":"2026-01-30","status":"complete","days_over_due":0},"6":{"job_id":7,"job_name":"Kitchen drawers cleaning","assigned_to":"Kamila","interval_days":180,"last_completed":"2025-10-25","next_due":"2026-04-23","status":"complete","days_over_due":0},"7":{"job_id":8,"job_name":"All bathrooms cleaning","assigned_to":"Matt","interval_days":14,"last_completed":"2025-10-25","next_due":"2025-11-08","status":"complete","days_over_due":0},"8":{"job_id":9,"job_name":"Two bathtubs cleaning","assigned_to":"Yasmina","interval_days":30,"last_completed":"2025-10-25","next_due":"2025-11-24","status":"complete","days_over_due":0},"9":{"job_id":10,"job_name":"Master shower cleaning","assigned_to":"Kamila","interval_days":90,"last_completed":"2025-10-25","next_due":"2026-01-23","status":"complete","days_over_due":0},"10":{"job_id":11,"job_name":"Clean desks, computers, and TV","assigned_to":"Yasmina","interval_days":90,"last_completed":"2025-10-25","next_due":"2026-01-23","status":"complete","days_over_due":0},"11":{"job_id":12,"job_name":"Clean garage floor","assigned_to":"Kamila","interval_days":180,"last_completed":"2025-10-25","next_due":"2026-04-23","status":"complete","days_over_due":0},"12":{"job_id":13,"job_name":"Clean befind fridge, washer, dryer","assigned_to":"Matt","interval_days":180,"last_completed":"2025-10-25","next_due":"2026-04-23","status":"complete","days_over_due":0}}
+{
+    "0": {
+        "job_id": 1,
+        "job_name": "Vacuum 1st floor",
+        "assigned_to": "Matt",
+        "interval_days": 14,
+        "last_completed": "2025-10-10",
+        "next_due": "2025-11-24",
+        "status": "due",
+        "days_over_due": 6,
+        "phone_number": "+17025777013"
+    },
+    "1": {
+        "job_id": 2,
+        "job_name": "Vacuum 2nd floor",
+        "assigned_to": "Kamila",
+        "interval_days": 14,
+        "last_completed": "2025-10-25",
+        "next_due": "2025-11-08",
+        "status": "complete",
+        "days_over_due": 0,
+        "phone_number": "+17025777013"
+    },
+    "2": {
+        "job_id": 3,
+        "job_name": "1st floor wash",
+        "assigned_to": "Yasmina",
+        "interval_days": 14,
+        "last_completed": "2025-10-20",
+        "next_due": "2025-11-04",
+        "status": "complete",
+        "days_over_due": 0,
+        "phone_number": "+17025777013"
+    },
+    "3": {
+        "job_id": 4,
+        "job_name": "Clean all fans",
+        "assigned_to": "Matt",
+        "interval_days": 90,
+        "last_completed": "2025-08-01",
+        "next_due": "2025-11-01",
+        "status": "complete",
+        "days_over_due": 0,
+        "phone_number": "+17025777001"
+    },
+    "4": {
+        "job_id": 5,
+        "job_name": "Cleaning the area under the beds",
+        "assigned_to": "Matt",
+        "interval_days": 180,
+        "last_completed": "2025-05-10",
+        "next_due": "2025-11-10",
+        "status": "complete",
+        "days_over_due": 0,
+        "phone_number": "+17025777001"
+    },
+    "5": {
+        "job_id": 6,
+        "job_name": "1st floor windows/window sill cleaning",
+        "assigned_to": "Yasmina",
+        "interval_days": 180,
+        "last_completed": "2025-05-10",
+        "next_due": "2025-11-10",
+        "status": "complete",
+        "days_over_due": 0,
+        "phone_number": "+17025777013"
+    },
+    "6": {
+        "job_id": 7,
+        "job_name": "Kitchen drawers cleaning",
+        "assigned_to": "Kamila",
+        "interval_days": 180,
+        "last_completed": "2025-05-10",
+        "next_due": "2025-11-10",
+        "status": "complete",
+        "days_over_due": 0,
+        "phone_number": "+17025777013"
+    },
+    "7": {
+        "job_id": 8,
+        "job_name": "1st floor bathroom cleaning",
+        "assigned_to": "Matt",
+        "interval_days": 14,
+        "last_completed": "2025-10-30",
+        "next_due": "2025-11-14",
+        "status": "complete",
+        "days_over_due": 0,
+        "phone_number": "+17025777001"
+    },
+    "8": {
+        "job_id": 9,
+        "job_name": "Two bathtubs cleaning",
+        "assigned_to": "Yasmina",
+        "interval_days": 30,
+        "last_completed": "2025-10-30",
+        "next_due": "2025-11-30",
+        "status": "complete",
+        "days_over_due": 0,
+        "phone_number": "+17025777013"
+    },
+    "9": {
+        "job_id": 10,
+        "job_name": "Master shower cleaning",
+        "assigned_to": "Kamila",
+        "interval_days": 180,
+        "last_completed": "2025-05-20",
+        "next_due": "2026-11-20",
+        "status": "complete",
+        "days_over_due": 0,
+        "phone_number": "+17025777013"
+    },
+    "10": {
+        "job_id": 11,
+        "job_name": "Clean desks, computers, and TV",
+        "assigned_to": "Yasmina",
+        "interval_days": 30,
+        "last_completed": "2025-10-30",
+        "next_due": "2026-11-30",
+        "status": "complete",
+        "days_over_due": 0,
+        "phone_number": "+17025777013"
+    },
+    "11": {
+        "job_id": 12,
+        "job_name": "Clean garage floor",
+        "assigned_to": "Kamila",
+        "interval_days": 180,
+        "last_completed": "2025-06-01",
+        "next_due": "2025-12-01",
+        "status": "complete",
+        "days_over_due": 0,
+        "phone_number": "+17025777013"
+    },
+    "12": {
+        "job_id": 13,
+        "job_name": "Clean befind fridge, washer, dryer",
+        "assigned_to": "Matt",
+        "interval_days": 180,
+        "last_completed": "2025-06-01",
+        "next_due": "2025-12-01",
+        "status": "complete",
+        "days_over_due": 0,
+        "phone_number": "+17025777001"
+    },
+    "13": {
+        "job_id": 14,
+        "job_name": "Master bathroom cleaning",
+        "assigned_to": "Kamila",
+        "interval_days": 14,
+        "last_completed": "2025-10-16",
+        "next_due": "2025-11-01",
+        "status": "complete",
+        "days_over_due": 0,
+        "phone_number": "+17025777013"
+    },
+    "14": {
+        "job_id": 15,
+        "job_name": "Kids' bathrooms cleaning",
+        "assigned_to": "Yasmina",
+        "interval_days": 14,
+        "last_completed": "2025-10-16",
+        "next_due": "2025-11-01",
+        "status": "complete",
+        "days_over_due": 0,
+        "phone_number": "+17025777013"
+    },
+    "15": {
+        "job_id": 16,
+        "job_name": "2nd floor windows/window sill cleaning",
+        "assigned_to": "Yasmina",
+        "interval_days": 120,
+        "last_completed": "2025-06-15",
+        "next_due": "2025-12-15",
+        "status": "complete",
+        "days_over_due": 0,
+        "phone_number": "+17025777013"
+    },
+    "16": {
+        "job_id": 17,
+        "job_name": "All blinds cleaning",
+        "assigned_to": "Kamila",
+        "interval_days": 120,
+        "last_completed": "2025-06-25",
+        "next_due": "2025-12-25",
+        "status": "complete",
+        "days_over_due": 0,
+        "phone_number": "+17025777013"
+    },
+    "17": {
+        "job_id": 18,
+        "job_name": "Oven/oven top cleaning",
+        "assigned_to": "Yasmina",
+        "interval_days": 14,
+        "last_completed": "2025-10-30",
+        "next_due": "2025-11-14",
+        "status": "complete",
+        "days_over_due": 0,
+        "phone_number": "+17025777013"
+    }
+}
