@@ -173,7 +173,7 @@
 
             //11052025: sending only complete item to s3 instead of the entire chores.json:
             const updatedItem = data.find(entry => entry.job_id === jobId);
-            const jsonString = JSON.stringify(updatedItem);
+            //const jsonString = JSON.stringify(updatedItem);
 
             // Send updated data to API
             const token = new URLSearchParams(window.location.hash.substring(1)).get('id_token')
