@@ -187,7 +187,7 @@
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(jsonString) //11052025: updated -> updatedItem.
+                body: JSON.stringify(updatedItem) //11052025: updated -> updatedItem.
             })
                 .then(response => response.json())
                 .then(data => console.log('Success:', data))
