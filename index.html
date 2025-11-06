@@ -162,7 +162,7 @@
 
             // Update the values in the data
             const updated = data.map(entry => {
-                if (entry.job_id === jobId) {
+                if (entry.chore_id === jobId) {
                     const lastCompleted = new Date(entry.last_completed); // from JSON
                     console.log(typeof lastCompleted)
                     const diffInDays = Math.floor((nowCompleted - lastCompleted) / msPerDay);
@@ -182,7 +182,7 @@
             pollForResults();
 
             //11052025: sending only complete item to s3 instead of the entire chores.json:
-            const updatedItem = updated.find(entry => entry.job_id === jobId);
+            const updatedItem = updated.find(entry => entry.chore_id === jobId);
 
             // Send updated data to API
             const token = new URLSearchParams(window.location.hash.substring(1)).get('id_token')
@@ -219,10 +219,10 @@
                 const div = document.createElement("div");
                 //markComplete is used below
                 div.innerHTML = `
-                    <p><strong>${job.job_name}</strong> (Last done: ${job.last_completed})</p>
-                    <label for="date-${job.job_id}">Mark as complete:</label>
-                    <input type="date" id="date-${job.job_id}" max="${today}">
-                    <button onclick="markComplete(${job.job_id})">Update</button> 
+                    <p><strong>${job.chore_name}</strong> (Last done: ${job.last_completed})</p>
+                    <label for="date-${job.chore_id}">Mark as complete:</label>
+                    <input type="date" id="date-${job.chore_id}" max="${today}">
+                    <button onclick="markComplete(${job.chore_id})">Update</button> 
                 `;
                 container.appendChild(div);
             });
@@ -259,7 +259,7 @@
                     completedDate.getMonth() === currentMonth &&
                     completedDate.getFullYear() === currentYear
                 ) {
-                    history_log.push(`${entry.job_name} on ${entry.last_completed}`);
+                    history_log.push(`${entry.chore_name} on ${entry.last_completed}`);
                 }
             });
             const container = document.getElementById("history-log");
@@ -279,7 +279,7 @@
                 if (
                     choreStatus === "due"
                 ) {
-                    due_log.push(`${entry.job_name} is ${entry.days_overdue} days overdue for ${entry.assigned_to}`);
+                    due_log.push(`${entry.chore_name} is ${entry.days_overdue} days overdue for ${entry.assigned_to}`);
                 }
             });
             const container2 = document.getElementById("due-chores-log");

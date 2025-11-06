@@ -1,7 +1,7 @@
 {
     "0": {
-        "job_id": 1,
-        "job_name": "Vacuum 1st floor",
+        "chore_id": 1,
+        "chore_name": "Vacuum 1st floor",
         "assigned_to": "Matt",
         "interval_days": 14,
         "last_completed": "2025-10-10",
@@ -14,8 +14,8 @@
         "instuction": ""
     },
     "1": {
-        "job_id": 2,
-        "job_name": "Vacuum 2nd floor",
+        "chore_id": 2,
+        "chore_name": "Vacuum 2nd floor",
         "assigned_to": "Kamila",
         "interval_days": 14,
         "last_completed": "2025-10-25",
@@ -28,8 +28,8 @@
         "instuction": ""
     },
     "2": {
-        "job_id": 3,
-        "job_name": "1st floor wash",
+        "chore_id": 3,
+        "chore_name": "1st floor wash",
         "assigned_to": "Yasmina",
         "interval_days": 14,
         "last_completed": "2025-10-20",
@@ -42,8 +42,8 @@
         "instuction": ""
     },
     "3": {
-        "job_id": 4,
-        "job_name": "Clean all fans",
+        "chore_id": 4,
+        "chore_name": "Clean all fans",
         "assigned_to": "Matt",
         "interval_days": 90,
         "last_completed": "2025-08-01",
@@ -56,8 +56,8 @@
         "instuction": ""
     },
     "4": {
-        "job_id": 5,
-        "job_name": "Cleaning the area under the beds",
+        "chore_id": 5,
+        "chore_name": "Cleaning the area under the beds",
         "assigned_to": "Matt",
         "interval_days": 180,
         "last_completed": "2025-05-10",
@@ -70,8 +70,8 @@
         "instuction": ""
     },
     "5": {
-        "job_id": 6,
-        "job_name": "1st floor windows/window sill cleaning",
+        "chore_id": 6,
+        "chore_name": "1st floor windows/window sill cleaning",
         "assigned_to": "Yasmina",
         "interval_days": 180,
         "last_completed": "2025-05-10",
@@ -84,8 +84,8 @@
         "instuction": ""
     },
     "6": {
-        "job_id": 7,
-        "job_name": "Kitchen drawers cleaning",
+        "chore_id": 7,
+        "chore_name": "Kitchen drawers cleaning",
         "assigned_to": "Kamila",
         "interval_days": 180,
         "last_completed": "2025-05-10",
@@ -98,8 +98,8 @@
         "instuction": ""
     },
     "7": {
-        "job_id": 8,
-        "job_name": "1st floor bathroom cleaning",
+        "chore_id": 8,
+        "chore_name": "1st floor bathroom cleaning",
         "assigned_to": "Matt",
         "interval_days": 14,
         "last_completed": "2025-10-30",
@@ -112,8 +112,8 @@
         "instuction": ""
     },
     "8": {
-        "job_id": 9,
-        "job_name": "Two bathtubs cleaning",
+        "chore_id": 9,
+        "chore_name": "Two bathtubs cleaning",
         "assigned_to": "Yasmina",
         "interval_days": 30,
         "last_completed": "2025-10-30",
@@ -126,8 +126,8 @@
         "instuction": ""
     },
     "9": {
-        "job_id": 10,
-        "job_name": "Master shower cleaning",
+        "chore_id": 10,
+        "chore_name": "Master shower cleaning",
         "assigned_to": "Kamila",
         "interval_days": 180,
         "last_completed": "2025-05-20",
@@ -140,8 +140,8 @@
         "instuction": ""
     },
     "10": {
-        "job_id": 11,
-        "job_name": "Clean desks, computers, and TV",
+        "chore_id": 11,
+        "chore_name": "Clean desks, computers, and TV",
         "assigned_to": "Yasmina",
         "interval_days": 30,
         "last_completed": "2025-10-30",
@@ -154,8 +154,8 @@
         "instuction": ""
     },
     "11": {
-        "job_id": 12,
-        "job_name": "Clean garage floor",
+        "chore_id": 12,
+        "chore_name": "Clean garage floor",
         "assigned_to": "Kamila",
         "interval_days": 180,
         "last_completed": "2025-06-01",
@@ -168,8 +168,8 @@
         "instuction": ""
     },
     "12": {
-        "job_id": 13,
-        "job_name": "Clean befind fridge, washer, dryer",
+        "chore_id": 13,
+        "chore_name": "Clean befind fridge, washer, dryer",
         "assigned_to": "Matt",
         "interval_days": 180,
         "last_completed": "2025-06-01",
@@ -182,8 +182,8 @@
         "instuction": ""
     },
     "13": {
-        "job_id": 14,
-        "job_name": "Master bathroom cleaning",
+        "chore_id": 14,
+        "chore_name": "Master bathroom cleaning",
         "assigned_to": "Kamila",
         "interval_days": 14,
         "last_completed": "2025-10-16",
@@ -196,8 +196,8 @@
         "instuction": ""
     },
     "14": {
-        "job_id": 15,
-        "job_name": "Kids' bathrooms cleaning",
+        "chore_id": 15,
+        "chore_name": "Kids' bathrooms cleaning",
         "assigned_to": "Yasmina",
         "interval_days": 14,
         "last_completed": "2025-10-16",
@@ -210,8 +210,8 @@
         "instuction": ""
     },
     "15": {
-        "job_id": 16,
-        "job_name": "2nd floor windows/window sill cleaning",
+        "chore_id": 16,
+        "chore_name": "2nd floor windows/window sill cleaning",
         "assigned_to": "Yasmina",
         "interval_days": 120,
         "last_completed": "2025-06-15",
@@ -224,8 +224,8 @@
         "instuction": ""
     },
     "16": {
-        "job_id": 17,
-        "job_name": "All blinds cleaning",
+        "chore_id": 17,
+        "chore_name": "All blinds cleaning",
         "assigned_to": "Kamila",
         "interval_days": 120,
         "last_completed": "2025-06-25",
@@ -238,8 +238,8 @@
         "instuction": ""
     },
     "17": {
-        "job_id": 18,
-        "job_name": "Oven/oven top cleaning",
+        "chore_id": 18,
+        "chore_name": "Oven/oven top cleaning",
         "assigned_to": "Yasmina",
         "interval_days": 14,
         "last_completed": "2025-10-30",
