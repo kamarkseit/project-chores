@@ -36,7 +36,7 @@
         "last_completed_with_DOD": 5,
         "last_completed_notes": "",
         "next_due": "2025-11-04",
-        "status": "complete",
+        "status": "due",
         "days_overdue": 0,
         "phone_number": "+17025777013",
         "instuction": ""
@@ -50,7 +50,7 @@
         "last_completed_with_DOD": 5,
         "last_completed_notes": "",
         "next_due": "2025-11-01",
-        "status": "complete",
+        "status": "due",
         "days_overdue": 0,
         "phone_number": "+17025777001",
         "instuction": ""

@@ -169,7 +169,7 @@
                     entry.last_completed_with_DOD = diffInDays;
 
                     entry.last_completed = newDate;
-                    entry.status = "complete";
+                    entry.chore_status = "complete";
                     nextDue.setDate(nextDue.getDate() + entry.interval_days); // Add interval
                     entry.next_due = nextDue.toISOString().split("T")[0]; // Format as "YYYY-MM-DD"
                     entry.days_overdue = 0;
@@ -207,7 +207,7 @@
             const container = document.getElementById("job-update-area");
             container.innerHTML = ""; // Clear previous
 
-            const jobs = data.filter(entry => entry.assigned_to === name && entry.status === "due");
+            const jobs = data.filter(entry => entry.assigned_to === name && entry.chore_status === "due");
 
             if (jobs.length === 0) {
                 container.textContent = "No jobs assigned to " + name;
@@ -275,7 +275,7 @@
             // Due Chores log logic
             const due_log = [];
             data.forEach(entry => {
-                const choreStatus = entry.status;
+                const choreStatus = entry.chore_status;
                 if (
                     choreStatus === "due"
                 ) {
