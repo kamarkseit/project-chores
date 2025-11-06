@@ -156,16 +156,16 @@
             // Recalculate the nextDue date
             const nextDue = new Date(newDate); // Convert string to Date object
             // Recalculate days that a completed chore was overdue before marked complete
-            const now_completed = new Date(newDate);
-            console.log(typeof now_completed)
+            const nowCompleted = new Date(newDate);
+            console.log(typeof nowCompleted)
             const msPerDay = 1000 * 60 * 60 * 24;
 
             // Update the values in the data
             const updated = data.map(entry => {
                 if (entry.job_id === jobId) {
                     const lastCompleted = new Date(entry.last_completed); // from JSON
-                    console.log(typeof entry.last_completed)
-                    const diffInDays = Math.floor((now_completed - last_completed) / msPerDay);
+                    console.log(typeof lastCompleted)
+                    const diffInDays = Math.floor((nowCompleted - lastCompleted) / msPerDay);
                     entry.last_completed_with_DOD = diffInDays;
 
                     entry.last_completed = newDate;
