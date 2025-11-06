@@ -155,14 +155,23 @@
             const data = Array.isArray(parsed) ? parsed : Object.values(parsed);
             // Recalculate the nextDue date
             const nextDue = new Date(newDate); // Convert string to Date object
+            // Recalculate days that a completed chore was overdue before marked complete
+            console.log(typeof newDate)
+            const msPerDay = 1000 * 60 * 60 * 24;
+
             // Update the values in the data
             const updated = data.map(entry => {
                 if (entry.job_id === jobId) {
+                    //const lastCompleted = new Date(entry.last_completed); // from JSON
+                    console.log(typeof entry.last_completed)
+                    const diffInDays = Math.floor((newDate - entry.last_completed) / msPerDay);
+                    entry.last_completed_with_DOD = diffInDays;
+
                     entry.last_completed = newDate;
                     entry.status = "complete";
                     nextDue.setDate(nextDue.getDate() + entry.interval_days); // Add interval
                     entry.next_due = nextDue.toISOString().split("T")[0]; // Format as "YYYY-MM-DD"
-                    entry.days_over_due = 0;
+                    entry.days_overdue = 0;
                 }
                 return entry;
             });
@@ -172,8 +181,7 @@
             pollForResults();
 
             //11052025: sending only complete item to s3 instead of the entire chores.json:
-            const updatedItem = data.find(entry => entry.job_id === jobId);
-            //const jsonString = JSON.stringify(updatedItem);
+            const updatedItem = updated.find(entry => entry.job_id === jobId);
 
             // Send updated data to API
             const token = new URLSearchParams(window.location.hash.substring(1)).get('id_token')
