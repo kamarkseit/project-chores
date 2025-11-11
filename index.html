@@ -241,10 +241,7 @@
 
         async function pollForResults() {
             const stored = localStorage.getItem("currentChores");
-            //console.log(stored)
-            const parsed = stored ? JSON.parse(stored) : {};
-            //console.log(parsed)
-            const data = Array.isArray(parsed) ? parsed : Object.values(parsed);
+            const data = stored ? JSON.parse(stored) : [];
 
             // Find today's date, month, and year.
             const now = new Date();
