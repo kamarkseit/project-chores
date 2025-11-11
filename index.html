@@ -109,13 +109,20 @@
 
                 if (response.ok) {
                     const result = await response.json();
-                    const data = result.chores;
-                    console.log("Chores loaded:", data);
-                    const dataArray = Object.values(data);
-                    localStorage.setItem("chores", JSON.stringify(dataArray));
-                    console.log("Local chores seeded from original JSON");
-                    const storedTest = localStorage.getItem("chores");
-                    console.log(storedTest)
+                    const data = result.chores;   // unified array with status field
+                    console.log("Chores loaded as raw data:", data);
+
+                    // Separate current vs completed data
+                    const currentChores = data.filter(chore => chore.status === "current");
+                    const completedChores = data.filter(chore => chore.status === "completed");
+
+                    // const dataArray = Object.values(currentChores);   this step is technically redundant
+                    localStorage.setItem("currentChores", JSON.stringify(currentChores));
+                    localStorage.setItem("completedChores", JSON.stringify(completedChores));
+
+                    // Check if stored data can be accessed 
+                    const storedData = JSON.parse(localStorage.getItem("currentChores"));
+                    console.log("Stored current chores check:", storedData);
                     pollForResults();
                 }
             } catch (err) {
@@ -157,14 +164,12 @@
             const nextDue = new Date(newDate); // Convert string to Date object
             // Recalculate days that a completed chore was overdue before marked complete
             const nowCompleted = new Date(newDate);
-            console.log(typeof nowCompleted)
             const msPerDay = 1000 * 60 * 60 * 24;
 
             // Update the values in the data
             const updated = data.map(entry => {
                 if (entry.chore_id === jobId) {
                     const lastCompleted = new Date(entry.last_completed); // from JSON
-                    console.log(typeof lastCompleted)
                     const diffInDays = Math.floor((nowCompleted - lastCompleted) / msPerDay);
                     entry.last_completed_with_DOD = diffInDays;
 
