@@ -131,7 +131,7 @@
         }
         // Gets the token and fetchs json data 
         async function ensureLocalChores() {
-            localStorage.removeItem("chores");
+            localStorage.removeItem("currentChores");
             const token = getTokenFromUrl();
             if (token) {
                 localStorage.setItem("idToken", token);
@@ -141,11 +141,6 @@
                 return;
             }
         }
-        // // OFFLINE USE ONLY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // async function ensureLocalChores() {
-        //     localStorage.removeItem("chores");
-        //     fetch('chores.json')
-        // }
 
         // Function is used to modify data and send it to S3 using API Gateway
         function markComplete(jobId) {
@@ -157,7 +152,7 @@
                 return;
             }
             // Grab the data from local storage
-            const stored = localStorage.getItem("chores");
+            const stored = localStorage.getItem("currentChores");
             const parsed = stored ? JSON.parse(stored) : {};
             const data = Array.isArray(parsed) ? parsed : Object.values(parsed);
             // Recalculate the nextDue date
@@ -182,7 +177,7 @@
                 return entry;
             });
             // Save updated data in local storage
-            localStorage.setItem("chores", JSON.stringify(updated));
+            localStorage.setItem("currentChores", JSON.stringify(updated));
             alert(`Job ${jobId} updated!`);
             pollForResults();
 
@@ -245,7 +240,7 @@
         }
 
         async function pollForResults() {
-            const stored = localStorage.getItem("chores");
+            const stored = localStorage.getItem("currentChores");
             //console.log(stored)
             const parsed = stored ? JSON.parse(stored) : {};
             //console.log(parsed)
@@ -323,7 +318,7 @@
             document.getElementById('logoutBtn').addEventListener('click', () => {
                 // Clear token/session and the chores data
                 localStorage.removeItem('idToken');
-                localStorage.removeItem("chores");
+                localStorage.removeItem("currentChores");
                 // Redirect to homepage or login
                 window.location.href = 'https://kamarkseit.github.io/project-chores/';
             });
