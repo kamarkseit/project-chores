@@ -331,6 +331,9 @@
             });
 
             // Analytics section logic
+            let choresByPersonChart;
+            let choresOverTimeChart;
+            let avgCompletionChart;
 
             // Load completed chores from localStorage
             const storedCompleted = localStorage.getItem("completedChores");
@@ -421,9 +424,7 @@
         // Main function is here
         async function init() {
             await ensureLocalChores(); // Waits for all internal async work
-            let choresByPersonChart;
-            let choresOverTimeChart;
-            let avgCompletionChart;
+
             pollForResults();          // Runs after chores are ensured
             // Logout logic
             document.getElementById('logoutBtn').addEventListener('click', () => {
