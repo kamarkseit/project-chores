@@ -328,6 +328,73 @@
                 const selected = select.value;
                 showJobsForParticipant(data, selected);
             });
+
+            // Analytics section logic
+
+            // Load completed chores from localStorage
+            const storedCompleted = localStorage.getItem("completedChores");
+            const completedChores = storedCompleted ? JSON.parse(storedCompleted) : [];
+
+            // Prepare data
+            const choresByPerson = {};
+            const choresByDate = {};
+            const completionTimes = {};
+
+            completedChores.forEach(chore => {
+                const person = chore.assigned_to;
+                const date = chore.completed_on; // assumes YYYY-MM-DD
+                const days = parseInt(chore.completed_with_DOD || 0);
+
+                choresByPerson[person] = (choresByPerson[person] || 0) + 1;
+                choresByDate[date] = (choresByDate[date] || 0) + 1;
+
+                if (!completionTimes[person]) completionTimes[person] = [];
+                completionTimes[person].push(days);
+            });
+
+            const avgCompletion = {};
+            Object.keys(completionTimes).forEach(person => {
+                const times = completionTimes[person];
+                avgCompletion[person] = times.reduce((a, b) => a + b, 0) / times.length;
+            });
+
+            // Render charts
+            new Chart(document.getElementById("choresByPerson"), {
+                type: "bar",
+                data: {
+                    labels: Object.keys(choresByPerson),
+                    datasets: [{
+                        label: "Chores Completed",
+                        data: Object.values(choresByPerson),
+                        backgroundColor: "rgba(75, 192, 192, 0.6)"
+                    }]
+                }
+            });
+
+            new Chart(document.getElementById("choresOverTime"), {
+                type: "line",
+                data: {
+                    labels: Object.keys(choresByDate).sort(), // sort dates
+                    datasets: [{
+                        label: "Chores Completed",
+                        data: Object.values(choresByDate),
+                        borderColor: "rgba(153, 102, 255, 1)",
+                        fill: false
+                    }]
+                }
+            });
+
+            new Chart(document.getElementById("avgCompletion"), {
+                type: "pie",
+                data: {
+                    labels: Object.keys(avgCompletion),
+                    datasets: [{
+                        label: "Avg Days to Complete",
+                        data: Object.values(avgCompletion),
+                        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"]
+                    }]
+                }
+            });
         }
 
         // Main function is here
