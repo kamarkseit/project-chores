@@ -117,14 +117,14 @@
             const hash = window.location.hash;
             return new URLSearchParams(hash.substring(1)).get('id_token');
         }
-        // Fetch json data that is stored in S3 using API Gateway and Cognito
+
+        // Fetch json data that is stored in DynamoDB using API Gateway and Cognito
         async function fetchData() {
             const token = localStorage.getItem("idToken");
             if (!token) {
                 alert("Please log in to view chores.");
                 return;
             }
-
             try {
                 const response = await fetch("https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod/update-json", {
                     method: "GET",
@@ -133,7 +133,6 @@
                         "Authorization": `Bearer ${token}`
                     }
                 });
-
                 if (response.ok) {
                     const result = await response.json();
                     const data = result.chores;   // unified array with status field
@@ -145,9 +144,7 @@
                     localStorage.setItem("currentChores", JSON.stringify(currentChores));
                     localStorage.setItem("completedChores", JSON.stringify(completedChores));
 
-                    // Check if stored data can be accessed 
-                    const storedData = JSON.parse(localStorage.getItem("currentChores"));
-                    pollForResults();
+                    //pollForResults();                                                                   //????????????????
                 }
             } catch (err) {
                 console.log("Error fetching data.");
@@ -156,6 +153,8 @@
         // Gets the token and fetchs json data 
         async function ensureLocalChores() {
             localStorage.removeItem("currentChores");
+            localStorage.removeItem("completedChores");
+
             const token = getTokenFromUrl();
             if (token) {
                 localStorage.setItem("idToken", token);
@@ -200,7 +199,7 @@
                 }
                 return entry;
             });
-            // Save updated data in local storage
+            // Save updated data in local storage and re-run the page
             localStorage.setItem("currentChores", JSON.stringify(updated));
             alert(`Job ${jobId} updated!`);
             pollForResults();
@@ -331,9 +330,6 @@
             });
 
             // Analytics section logic
-            let choresByPersonChart;
-            let choresOverTimeChart;
-            let avgCompletionChart;
 
             // Load completed chores from localStorage
             const storedCompleted = localStorage.getItem("completedChores");
@@ -424,7 +420,6 @@
         // Main function is here
         async function init() {
             await ensureLocalChores(); // Waits for all internal async work
-
             pollForResults();          // Runs after chores are ensured
             // Logout logic
             document.getElementById('logoutBtn').addEventListener('click', () => {
@@ -436,7 +431,10 @@
             });
         }
 
-        // Running the main function
+        // Running the main function and global references
+        let choresByPersonChart = null;
+        let choresOverTimeChart = null;
+        let avgCompletionChart = null;
         init();
 
 
