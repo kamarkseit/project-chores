@@ -358,9 +358,21 @@
                 const times = completionTimes[person];
                 avgCompletion[person] = times.reduce((a, b) => a + b, 0) / times.length;
             });
+            const sortedParticipants = Object.entries(avgCompletion)
+                .sort((a, b) => a[1] - b[1]); // ascending order
 
             // Render charts
-            new Chart(document.getElementById("choresByPerson"), {
+            if (choresByPersonChart) {
+                choresByPersonChart.destroy();
+            }
+            if (choresOverTimeChart) {
+                choresOverTimeChart.destroy();
+            }
+            if (avgCompletionChart) {
+                avgCompletionChart.destroy();
+            }
+
+            choresByPersonChart = new Chart(document.getElementById("choresByPerson"), {
                 type: "bar",
                 data: {
                     labels: Object.keys(choresByPerson),
@@ -372,7 +384,7 @@
                 }
             });
 
-            new Chart(document.getElementById("choresOverTime"), {
+            choresOverTimeChart = new Chart(document.getElementById("choresOverTime"), {
                 type: "line",
                 data: {
                     labels: Object.keys(choresByDate).sort(), // sort dates
@@ -385,15 +397,23 @@
                 }
             });
 
-            new Chart(document.getElementById("avgCompletion"), {
-                type: "pie",
+            avgCompletionChart = new Chart(document.getElementById("avgCompletion"), {
+                type: "bar",
                 data: {
-                    labels: Object.keys(avgCompletion),
+                    labels: sortedParticipants.map(([person]) => person),
                     datasets: [{
                         label: "Avg Days to Complete",
-                        data: Object.values(avgCompletion),
-                        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"]
+                        data: sortedParticipants.map(([_, avg]) => avg),
+                        backgroundColor: "rgba(54, 162, 235, 0.6)"
                     }]
+                },
+                options: {
+                    indexAxis: 'y', // horizontal bars
+                    scales: {
+                        x: {
+                            title: { display: true, text: "Days" }
+                        }
+                    }
                 }
             });
         }
@@ -401,6 +421,9 @@
         // Main function is here
         async function init() {
             await ensureLocalChores(); // Waits for all internal async work
+            let choresByPersonChart;
+            let choresOverTimeChart;
+            let avgCompletionChart;
             pollForResults();          // Runs after chores are ensured
             // Logout logic
             document.getElementById('logoutBtn').addEventListener('click', () => {
@@ -411,6 +434,7 @@
                 window.location.href = 'https://kamarkseit.github.io/project-chores/';
             });
         }
+
         // Running the main function
         init();
 
