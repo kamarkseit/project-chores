@@ -361,6 +361,14 @@
             const sortedParticipants = Object.entries(avgCompletion)
                 .sort((a, b) => a[1] - b[1]); // ascending order
 
+            // Convert to array of [date, count]
+            const choresArray = Object.entries(choresByDate);
+            // Sort chronologically
+            choresArray.sort((a, b) => new Date(a[0]) - new Date(b[0]));
+            // Separate into labels and values
+            const labels = choresArray.map(([date]) => date);
+            const values = choresArray.map(([_, count]) => count);
+
             // Render charts
             if (choresByPersonChart) {
                 choresByPersonChart.destroy();
@@ -387,13 +395,24 @@
             choresOverTimeChart = new Chart(document.getElementById("choresOverTime"), {
                 type: "line",
                 data: {
-                    labels: Object.keys(choresByDate).sort(), // sort dates
+                    labels: labels,
                     datasets: [{
                         label: "Chores Completed",
-                        data: Object.values(choresByDate),
+                        data: values,
                         borderColor: "rgba(153, 102, 255, 1)",
                         fill: false
                     }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: { display: true, text: "Date" }
+                        },
+                        y: {
+                            title: { display: true, text: "Chores Completed" },
+                            beginAtZero: true
+                        }
+                    }
                 }
             });
 
