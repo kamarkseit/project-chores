@@ -199,10 +199,6 @@
                 }
                 return entry;
             });
-            // Save updated data in local storage and re-run the page
-            localStorage.setItem("currentChores", JSON.stringify(updated));
-            alert(`Job ${jobId} updated!`);
-            pollForResults();
 
             //11052025: sending only complete item to s3 instead of the entire chores.json:
             const updatedItem = updated.find(entry => entry.chore_id === jobId);
@@ -224,6 +220,11 @@
                 .then(response => response.json())
                 .then(data => console.log('Success:', data))
                 .catch(error => console.error('Error:', error));
+
+            // Save updated data in local storage and re-run the page
+            //localStorage.setItem("currentChores", JSON.stringify(updated));      may need to delete this; unnecessary step??????????????
+            alert(`Job ${jobId} updated!`);
+            fetchData();   //pollForResults();                            // OR fetch data??????????????????????
         }
 
         function showJobsForParticipant(data, name) {
