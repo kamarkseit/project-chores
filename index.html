@@ -144,7 +144,7 @@
                     localStorage.setItem("currentChores", JSON.stringify(currentChores));
                     localStorage.setItem("completedChores", JSON.stringify(completedChores));
 
-                    //pollForResults();                                                                   //????????????????
+                    pollForResults();                                                                   //????????????????
                 }
             } catch (err) {
                 console.log("Error fetching data.");
@@ -420,7 +420,7 @@
         // Main function is here
         async function init() {
             await ensureLocalChores(); // Waits for all internal async work
-            pollForResults();          // Runs after chores are ensured
+            //pollForResults();          // Runs after chores are ensured
             // Logout logic
             document.getElementById('logoutBtn').addEventListener('click', () => {
                 // Clear token/session and the chores data
