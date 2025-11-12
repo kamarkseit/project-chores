@@ -79,6 +79,32 @@
             </div>
         </div>
 
+
+        <!-- Analytics Section -->
+        <div class="card mt-4">
+            <div class="card-header bg-info text-white">
+                <h2 class="h5 mb-0">Analytics</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Chart 1 -->
+                    <div class="col-md-6 mb-4">
+                        <canvas id="choresByPerson"></canvas>
+                    </div>
+                    <!-- Chart 2 -->
+                    <div class="col-md-6 mb-4">
+                        <canvas id="choresOverTime"></canvas>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- Chart 3 -->
+                    <div class="col-md-12">
+                        <canvas id="avgCompletion"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 
@@ -110,19 +136,16 @@
                 if (response.ok) {
                     const result = await response.json();
                     const data = result.chores;   // unified array with status field
-                    console.log("Chores loaded as raw data:", data);
 
                     // Separate current vs completed data
                     const currentChores = data.filter(chore => chore.status === "current");
                     const completedChores = data.filter(chore => chore.status === "completed");
 
-                    // const dataArray = Object.values(currentChores);   this step is technically redundant
                     localStorage.setItem("currentChores", JSON.stringify(currentChores));
                     localStorage.setItem("completedChores", JSON.stringify(completedChores));
 
                     // Check if stored data can be accessed 
                     const storedData = JSON.parse(localStorage.getItem("currentChores"));
-                    console.log("Stored current chores check:", storedData);
                     pollForResults();
                 }
             } catch (err) {
