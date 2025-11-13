@@ -144,7 +144,7 @@
                     localStorage.setItem("currentChores", JSON.stringify(currentChores));
                     localStorage.setItem("completedChores", JSON.stringify(completedChores));
 
-                    pollForResults();                                                                   //????????????????
+                    pollForResults();
                 }
             } catch (err) {
                 console.log("Error fetching data.");
@@ -221,10 +221,10 @@
                 .then(data => console.log('Success:', data))
                 .catch(error => console.error('Error:', error));
 
-            // Save updated data in local storage and re-run the page
-            //localStorage.setItem("currentChores", JSON.stringify(updated));      may need to delete this; unnecessary step??????????????
+            // Re-fetch the data from DynamoDB for the up-to-date data
             alert(`Job ${jobId} updated!`);
-            fetchData();   //pollForResults();                            // OR fetch data??????????????????????
+            fetchData();
+            // ???? May need to automatically reload the page here ????
         }
 
         function showJobsForParticipant(data, name) {
@@ -273,6 +273,8 @@
             const currentYear = now.getFullYear();
 
             // History log logic
+            const container = document.getElementById("history-log");
+            container.innerHTML = "";
             const history_log = [];
             data.forEach(entry => {
                 const completedDate = new Date(entry.last_completed + "T00:00:00Z");
@@ -283,7 +285,7 @@
                     history_log.push(`${entry.chore_name} on ${entry.last_completed}`);
                 }
             });
-            const container = document.getElementById("history-log");
+
             if (history_log.length === 0) {
                 container.textContent = "No job was completed this month.";
             } else {
@@ -294,6 +296,8 @@
             }
 
             // Due Chores log logic
+            const container2 = document.getElementById("due-chores-log");
+            container2.innerHTML = "";
             const due_log = [];
             data.forEach(entry => {
                 const choreStatus = entry.chore_status;
@@ -303,7 +307,7 @@
                     due_log.push(`${entry.chore_name} is ${entry.days_overdue} days overdue for ${entry.assigned_to}`);
                 }
             });
-            const container2 = document.getElementById("due-chores-log");
+
             if (due_log.length === 0) {
                 container2.textContent = "No jobs are due today.";
             } else {
@@ -314,8 +318,9 @@
             }
 
             // Populate participant dropdown
-            const participants = [...new Set(data.map(entry => entry.assigned_to))];
             const select = document.getElementById("participant-select");
+            select.innerHTML = '<option value="">------Select------</option>'; // reset
+            const participants = [...new Set(data.map(entry => entry.assigned_to))];
 
             participants.forEach(name => {
                 const option = document.createElement("option");
@@ -324,138 +329,138 @@
                 select.appendChild(option);
             });
 
-            // Add listener to show jobs when a name is selected
-            select.addEventListener("change", () => {
+            // Attach listener once
+            select.onchange = () => {
                 const selected = select.value;
                 showJobsForParticipant(data, selected);
-            });
+            };
 
             // Analytics section logic
 
             // Load completed chores from localStorage
             const storedCompleted = localStorage.getItem("completedChores");
             const completedChores = storedCompleted ? JSON.parse(storedCompleted) : [];
+            renderAnalytics(completedChores);
 
-            // Prepare data
-            const choresByPerson = {};
-            const choresByDate = {};
-            const completionTimes = {};
-
-            completedChores.forEach(chore => {
-                const person = chore.assigned_to;
-                const date = chore.completed_on; // assumes YYYY-MM-DD
-                const days = parseInt(chore.completed_with_DOD || 0);
-
-                choresByPerson[person] = (choresByPerson[person] || 0) + 1;
-                choresByDate[date] = (choresByDate[date] || 0) + 1;
-
-                if (!completionTimes[person]) completionTimes[person] = [];
-                completionTimes[person].push(days);
-            });
-
-            const avgCompletion = {};
-            Object.keys(completionTimes).forEach(person => {
-                const times = completionTimes[person];
-                avgCompletion[person] = times.reduce((a, b) => a + b, 0) / times.length;
-            });
-            const sortedParticipants = Object.entries(avgCompletion)
-                .sort((a, b) => a[1] - b[1]); // ascending order
-
-            // Convert to array of [date, count]
-            const choresArray = Object.entries(choresByDate);
-            // Sort chronologically
-            choresArray.sort((a, b) => new Date(a[0]) - new Date(b[0]));
-            // Separate into labels and values
-            const labels = choresArray.map(([date]) => date);
-            const values = choresArray.map(([_, count]) => count);
-
-            // Render charts
-            if (choresByPersonChart) {
-                choresByPersonChart.destroy();
-            }
-            if (choresOverTimeChart) {
-                choresOverTimeChart.destroy();
-            }
-            if (avgCompletionChart) {
-                avgCompletionChart.destroy();
-            }
-
-            choresByPersonChart = new Chart(document.getElementById("choresByPerson"), {
-                type: "bar",
-                data: {
-                    labels: Object.keys(choresByPerson),
-                    datasets: [{
-                        label: "Chores Completed",
-                        data: Object.values(choresByPerson),
-                        backgroundColor: "rgba(75, 192, 192, 0.6)"
-                    }]
+            function renderAnalytics(data) {
+                // Destroy old charts if they exist
+                if (choresByPersonChart) {
+                    choresByPersonChart.destroy();
                 }
-            });
+                if (choresOverTimeChart) {
+                    choresOverTimeChart.destroy();
+                }
+                if (avgCompletionChart) {
+                    avgCompletionChart.destroy();
+                }
+                // Prepare data
+                const choresByPerson = {};
+                const choresByDate = {};
+                const completionTimes = {};
+                completedChores.forEach(chore => {
+                    const person = chore.assigned_to;
+                    const date = chore.completed_on; // assumes YYYY-MM-DD
+                    const days = parseInt(chore.completed_with_DOD || 0);
+                    choresByPerson[person] = (choresByPerson[person] || 0) + 1;
+                    choresByDate[date] = (choresByDate[date] || 0) + 1;
+                    if (!completionTimes[person]) completionTimes[person] = [];
+                    completionTimes[person].push(days);
+                });
 
-            choresOverTimeChart = new Chart(document.getElementById("choresOverTime"), {
-                type: "line",
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: "Chores Completed",
-                        data: values,
-                        borderColor: "rgba(153, 102, 255, 1)",
-                        fill: false
-                    }]
-                },
-                options: {
-                    scales: {
-                        x: {
-                            title: { display: true, text: "Date" }
-                        },
-                        y: {
-                            title: { display: true, text: "Chores Completed" },
-                            beginAtZero: true
+                const avgCompletion = {};
+                Object.keys(completionTimes).forEach(person => {
+                    const times = completionTimes[person];
+                    avgCompletion[person] = times.reduce((a, b) => a + b, 0) / times.length;
+                });
+                const sortedParticipants = Object.entries(avgCompletion)
+                    .sort((a, b) => a[1] - b[1]); // ascending order
+
+                // Convert to array of [date, count]
+                const choresArray = Object.entries(choresByDate);
+                // Sort chronologically
+                choresArray.sort((a, b) => new Date(a[0]) - new Date(b[0]));
+                // Separate into labels and values
+                const labels = choresArray.map(([date]) => date);
+                const values = choresArray.map(([_, count]) => count);
+
+                // Render charts
+                choresByPersonChart = new Chart(document.getElementById("choresByPerson"), {
+                    type: "bar",
+                    data: {
+                        labels: Object.keys(choresByPerson),
+                        datasets: [{
+                            label: "Chores Completed",
+                            data: Object.values(choresByPerson),
+                            backgroundColor: "rgba(75, 192, 192, 0.6)"
+                        }]
+                    }
+                });
+
+                choresOverTimeChart = new Chart(document.getElementById("choresOverTime"), {
+                    type: "line",
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: "Chores Completed",
+                            data: values,
+                            borderColor: "rgba(153, 102, 255, 1)",
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                title: { display: true, text: "Date" }
+                            },
+                            y: {
+                                title: { display: true, text: "Chores Completed" },
+                                beginAtZero: true
+                            }
                         }
                     }
-                }
-            });
+                });
 
-            avgCompletionChart = new Chart(document.getElementById("avgCompletion"), {
-                type: "bar",
-                data: {
-                    labels: sortedParticipants.map(([person]) => person),
-                    datasets: [{
-                        label: "Avg Days to Complete",
-                        data: sortedParticipants.map(([_, avg]) => avg),
-                        backgroundColor: "rgba(54, 162, 235, 0.6)"
-                    }]
-                },
-                options: {
-                    indexAxis: 'y', // horizontal bars
-                    scales: {
-                        x: {
-                            title: { display: true, text: "Days" }
+                avgCompletionChart = new Chart(document.getElementById("avgCompletion"), {
+                    type: "bar",
+                    data: {
+                        labels: sortedParticipants.map(([person]) => person),
+                        datasets: [{
+                            label: "Avg Days to Complete",
+                            data: sortedParticipants.map(([_, avg]) => avg),
+                            backgroundColor: "rgba(54, 162, 235, 0.6)"
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y', // horizontal bars
+                        scales: {
+                            x: {
+                                title: { display: true, text: "Days" }
+                            }
                         }
                     }
-                }
-            });
-        }
+                });
+            }
 
-        // Main function is here
-        async function init() {
-            await ensureLocalChores(); // Waits for all internal async work
-            //pollForResults();          // Runs after chores are ensured
-            // Logout logic
-            document.getElementById('logoutBtn').addEventListener('click', () => {
-                // Clear token/session and the chores data
-                localStorage.removeItem('idToken');
-                localStorage.removeItem("currentChores");
-                // Redirect to homepage or login
-                window.location.href = 'https://kamarkseit.github.io/project-chores/';
-            });
-        }
 
-        // Running the main function and global references
-        let choresByPersonChart = null;
-        let choresOverTimeChart = null;
-        let avgCompletionChart = null;
-        init();
+            // Main function is here
+            async function init() {
+                await ensureLocalChores(); // Waits for all internal async work
+                //pollForResults();          // Runs after chores are ensured
+                // Logout logic
+                document.getElementById('logoutBtn').addEventListener('click', () => {
+                    // Clear token/session and the chores data
+                    localStorage.removeItem('idToken');
+                    localStorage.removeItem("currentChores");
+                    // Redirect to homepage or login
+                    window.location.href = 'https://kamarkseit.github.io/project-chores/';
+                });
+            }
+
+            // Running the main function and global references
+            let choresByPersonChart = null;
+            let choresOverTimeChart = null;
+            let avgCompletionChart = null;
+            init();
 
 
     </script>
