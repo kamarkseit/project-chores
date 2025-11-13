@@ -176,8 +176,8 @@
             }
             // Grab the data from local storage
             const stored = localStorage.getItem("currentChores");
-            const parsed = stored ? JSON.parse(stored) : {};
-            const data = Array.isArray(parsed) ? parsed : Object.values(parsed);
+            const data = stored ? JSON.parse(stored) : [];
+            //const data = Array.isArray(parsed) ? parsed : Object.values(parsed);                     may need to delete ... redundant
             // Recalculate the nextDue date
             const nextDue = new Date(newDate); // Convert string to Date object
             // Recalculate days that a completed chore was overdue before marked complete
@@ -252,16 +252,16 @@
             });
         }
 
-        async function tryFetch(url) {
-            try {
-                const response = await fetch(url);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                return await response.json();
-            } catch (err) {
-                console.error("Fetch error:", err);
-                return null;
-            }
-        }
+        // async function tryFetch(url) {                                                 NOT USED...DELETE?????
+        //     try {
+        //         const response = await fetch(url);
+        //         if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        //         return await response.json();
+        //     } catch (err) {
+        //         console.error("Fetch error:", err);
+        //         return null;
+        //     }
+        // }
 
         async function pollForResults() {
             const stored = localStorage.getItem("currentChores");
@@ -282,10 +282,10 @@
                     completedDate.getMonth() === currentMonth &&
                     completedDate.getFullYear() === currentYear
                 ) {
-                    history_log.push(`${entry.chore_name} on ${entry.last_completed}`);
+                    history_log.push(`${entry.last_completed}: ${entry.chore_name}`);
                 }
             });
-
+            history_log.sort();
             if (history_log.length === 0) {
                 container.textContent = "No job was completed this month.";
             } else {
