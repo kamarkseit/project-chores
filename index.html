@@ -341,126 +341,126 @@
             const storedCompleted = localStorage.getItem("completedChores");
             const completedChores = storedCompleted ? JSON.parse(storedCompleted) : [];
             renderAnalytics(completedChores);
+        }
 
-            function renderAnalytics(data) {
-                // Destroy old charts if they exist
-                if (choresByPersonChart) {
-                    choresByPersonChart.destroy();
+        function renderAnalytics(data) {
+            // Destroy old charts if they exist
+            if (choresByPersonChart) {
+                choresByPersonChart.destroy();
+            }
+            if (choresOverTimeChart) {
+                choresOverTimeChart.destroy();
+            }
+            if (avgCompletionChart) {
+                avgCompletionChart.destroy();
+            }
+            // Prepare data
+            const choresByPerson = {};
+            const choresByDate = {};
+            const completionTimes = {};
+            completedChores.forEach(chore => {
+                const person = chore.assigned_to;
+                const date = chore.completed_on; // assumes YYYY-MM-DD
+                const days = parseInt(chore.completed_with_DOD || 0);
+                choresByPerson[person] = (choresByPerson[person] || 0) + 1;
+                choresByDate[date] = (choresByDate[date] || 0) + 1;
+                if (!completionTimes[person]) completionTimes[person] = [];
+                completionTimes[person].push(days);
+            });
+
+            const avgCompletion = {};
+            Object.keys(completionTimes).forEach(person => {
+                const times = completionTimes[person];
+                avgCompletion[person] = times.reduce((a, b) => a + b, 0) / times.length;
+            });
+            const sortedParticipants = Object.entries(avgCompletion)
+                .sort((a, b) => a[1] - b[1]); // ascending order
+
+            // Convert to array of [date, count]
+            const choresArray = Object.entries(choresByDate);
+            // Sort chronologically
+            choresArray.sort((a, b) => new Date(a[0]) - new Date(b[0]));
+            // Separate into labels and values
+            const labels = choresArray.map(([date]) => date);
+            const values = choresArray.map(([_, count]) => count);
+
+            // Render charts
+            choresByPersonChart = new Chart(document.getElementById("choresByPerson"), {
+                type: "bar",
+                data: {
+                    labels: Object.keys(choresByPerson),
+                    datasets: [{
+                        label: "Chores Completed",
+                        data: Object.values(choresByPerson),
+                        backgroundColor: "rgba(75, 192, 192, 0.6)"
+                    }]
                 }
-                if (choresOverTimeChart) {
-                    choresOverTimeChart.destroy();
-                }
-                if (avgCompletionChart) {
-                    avgCompletionChart.destroy();
-                }
-                // Prepare data
-                const choresByPerson = {};
-                const choresByDate = {};
-                const completionTimes = {};
-                completedChores.forEach(chore => {
-                    const person = chore.assigned_to;
-                    const date = chore.completed_on; // assumes YYYY-MM-DD
-                    const days = parseInt(chore.completed_with_DOD || 0);
-                    choresByPerson[person] = (choresByPerson[person] || 0) + 1;
-                    choresByDate[date] = (choresByDate[date] || 0) + 1;
-                    if (!completionTimes[person]) completionTimes[person] = [];
-                    completionTimes[person].push(days);
-                });
+            });
 
-                const avgCompletion = {};
-                Object.keys(completionTimes).forEach(person => {
-                    const times = completionTimes[person];
-                    avgCompletion[person] = times.reduce((a, b) => a + b, 0) / times.length;
-                });
-                const sortedParticipants = Object.entries(avgCompletion)
-                    .sort((a, b) => a[1] - b[1]); // ascending order
-
-                // Convert to array of [date, count]
-                const choresArray = Object.entries(choresByDate);
-                // Sort chronologically
-                choresArray.sort((a, b) => new Date(a[0]) - new Date(b[0]));
-                // Separate into labels and values
-                const labels = choresArray.map(([date]) => date);
-                const values = choresArray.map(([_, count]) => count);
-
-                // Render charts
-                choresByPersonChart = new Chart(document.getElementById("choresByPerson"), {
-                    type: "bar",
-                    data: {
-                        labels: Object.keys(choresByPerson),
-                        datasets: [{
-                            label: "Chores Completed",
-                            data: Object.values(choresByPerson),
-                            backgroundColor: "rgba(75, 192, 192, 0.6)"
-                        }]
-                    }
-                });
-
-                choresOverTimeChart = new Chart(document.getElementById("choresOverTime"), {
-                    type: "line",
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: "Chores Completed",
-                            data: values,
-                            borderColor: "rgba(153, 102, 255, 1)",
-                            fill: false
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            x: {
-                                title: { display: true, text: "Date" }
-                            },
-                            y: {
-                                title: { display: true, text: "Chores Completed" },
-                                beginAtZero: true
-                            }
+            choresOverTimeChart = new Chart(document.getElementById("choresOverTime"), {
+                type: "line",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Chores Completed",
+                        data: values,
+                        borderColor: "rgba(153, 102, 255, 1)",
+                        fill: false
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: { display: true, text: "Date" }
+                        },
+                        y: {
+                            title: { display: true, text: "Chores Completed" },
+                            beginAtZero: true
                         }
                     }
-                });
+                }
+            });
 
-                avgCompletionChart = new Chart(document.getElementById("avgCompletion"), {
-                    type: "bar",
-                    data: {
-                        labels: sortedParticipants.map(([person]) => person),
-                        datasets: [{
-                            label: "Avg Days to Complete",
-                            data: sortedParticipants.map(([_, avg]) => avg),
-                            backgroundColor: "rgba(54, 162, 235, 0.6)"
-                        }]
-                    },
-                    options: {
-                        indexAxis: 'y', // horizontal bars
-                        scales: {
-                            x: {
-                                title: { display: true, text: "Days" }
-                            }
+            avgCompletionChart = new Chart(document.getElementById("avgCompletion"), {
+                type: "bar",
+                data: {
+                    labels: sortedParticipants.map(([person]) => person),
+                    datasets: [{
+                        label: "Avg Days to Complete",
+                        data: sortedParticipants.map(([_, avg]) => avg),
+                        backgroundColor: "rgba(54, 162, 235, 0.6)"
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // horizontal bars
+                    scales: {
+                        x: {
+                            title: { display: true, text: "Days" }
                         }
                     }
-                });
-            }
+                }
+            });
+        }
 
+        // Main function is here
+        async function init() {
+            await ensureLocalChores(); // Waits for all internal async work
+            //pollForResults();          // Runs after chores are ensured
+            // Logout logic
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                // Clear token/session and the chores data
+                localStorage.removeItem('idToken');
+                localStorage.removeItem("currentChores");
+                // Redirect to homepage or login
+                window.location.href = 'https://kamarkseit.github.io/project-chores/';
+            });
+        }
 
-            // Main function is here
-            async function init() {
-                await ensureLocalChores(); // Waits for all internal async work
-                //pollForResults();          // Runs after chores are ensured
-                // Logout logic
-                document.getElementById('logoutBtn').addEventListener('click', () => {
-                    // Clear token/session and the chores data
-                    localStorage.removeItem('idToken');
-                    localStorage.removeItem("currentChores");
-                    // Redirect to homepage or login
-                    window.location.href = 'https://kamarkseit.github.io/project-chores/';
-                });
-            }
-
-            // Running the main function and global references
-            let choresByPersonChart = null;
-            let choresOverTimeChart = null;
-            let avgCompletionChart = null;
-            init();
+        // Running the main function and global references
+        let choresByPersonChart = null;
+        let choresOverTimeChart = null;
+        let avgCompletionChart = null;
+        init();
 
 
     </script>
