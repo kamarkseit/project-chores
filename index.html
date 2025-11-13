@@ -252,17 +252,6 @@
             });
         }
 
-        // async function tryFetch(url) {                                                 NOT USED...DELETE?????
-        //     try {
-        //         const response = await fetch(url);
-        //         if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        //         return await response.json();
-        //     } catch (err) {
-        //         console.error("Fetch error:", err);
-        //         return null;
-        //     }
-        // }
-
         async function pollForResults() {
             const stored = localStorage.getItem("currentChores");
             const data = stored ? JSON.parse(stored) : [];
@@ -282,7 +271,7 @@
                     completedDate.getMonth() === currentMonth &&
                     completedDate.getFullYear() === currentYear
                 ) {
-                    history_log.push(`${entry.last_completed}: ${entry.chore_name}`);
+                    history_log.push(`${entry.last_completed}: ${entry.chore_name} by ${entry.assigned_to}`);
                 }
             });
             history_log.sort();
