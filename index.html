@@ -33,7 +33,10 @@
                 Logout
             </button>
 
-            <button id="create-account">Create new account</button>
+            <button id="create-account"
+                onclick="window.location.href='https://us-east-2kycpqllvh.auth.us-east-2.amazoncognito.com/signup?client_id=2u8c3k58lg83f0blfqn65vbnrf&redirect_uri=https%3A%2F%2Fkamarkseit.github.io%2Fproject-chores%2F&response_type=token&scope=email+openid+phone'">
+                Create new account
+            </button>
 
         </div>
 
@@ -435,13 +438,6 @@
 
         // Main function is here
         async function init() {
-
-            const url = `https://us-east-2kycpqllvh.auth.us-east-2.amazoncognito.com/signup?client_id=2u8c3k58lg83f0blfqn65vbnrf&redirect_uri=https%3A%2F%2Fkamarkseit.github.io%2Fproject-chores%2F&response_type=token&scope=email+openid+phone`;
-
-            document.getElementById("create-account").addEventListener("click", () => {
-                window.location.href = url;
-            });
-
             await ensureLocalChores(); // Waits for all internal async work
             //pollForResults();          // Runs after chores are ensured
             // Logout logic
