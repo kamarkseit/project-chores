@@ -436,11 +436,7 @@
         // Main function is here
         async function init() {
 
-            const domain = "https://us-east-2kycpqllvh.auth.us-east-2.amazoncognito.com";
-            const clientId = "2u8c3k58lg83f0blfqn65vbnrf";
-            const redirectUri = encodeURIComponent("https://kamarkseit.github.io/project-chors/");
-            const scope = encodeURIComponent("openid email profile");
-            const url = `${domain}/signup?client_id=${clientId}&response_type=token&scope=${scope}&redirect_uri=${redirectUri}`;
+            const url = `https://us-east-2kycpqllvh.auth.us-east-2.amazoncognito.com/signup?client_id=2u8c3k58lg83f0blfqn65vbnrf&redirect_uri=https%3A%2F%2Fkamarkseit.github.io%2Fproject-chores%2F&response_type=token&scope=email+openid+phone`;
 
             document.getElementById("create-account").addEventListener("click", () => {
                 window.location.href = url;
