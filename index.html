@@ -57,7 +57,7 @@
                     </div>
                     <div class="card-body">
                         <p class="mb-2">These chores are currently due or overdue.</p>
-                        <div id="due-chores-log" class="alert alert-warning">Please login.</div>
+                        <div id="due-chores-log" class="alert alert-warning"></div>
                     </div>
                 </div>
             </div>
@@ -127,6 +127,10 @@
             }
             try {
                 document.getElementById("history-log").classList.add("spinner-border");
+                document.getElementById("due-chores-log").classList.add("spinner-border");
+                document.getElementById("choresByPerson").classList.add("spinner-border");
+                document.getElementById("choresOverTime").classList.add("spinner-border");
+                document.getElementById("avgCompletion").classList.add("spinner-border");
                 const response = await fetch("https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod/update-json", {
                     method: "GET",
                     headers: {
@@ -145,6 +149,10 @@
                     localStorage.setItem("currentChores", JSON.stringify(currentChores));
                     localStorage.setItem("completedChores", JSON.stringify(completedChores));
                     document.getElementById("history-log").classList.remove("spinner-border");
+                    document.getElementById("due-chores-log").classList.remove("spinner-border");
+                    document.getElementById("choresByPerson").classList.remove("spinner-border");
+                    document.getElementById("choresOverTime").classList.remove("spinner-border");
+                    document.getElementById("avgCompletion").classList.remove("spinner-border");
                     pollForResults();
                 }
             } catch (err) {
