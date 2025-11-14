@@ -33,6 +33,8 @@
                 Logout
             </button>
 
+            <button id="create-account">Create new account</button>
+
         </div>
 
         <div class="row">
@@ -433,6 +435,17 @@
 
         // Main function is here
         async function init() {
+
+            const domain = "https://us-east-2kycpqllvh.auth.us-east-2.amazoncognito.com";
+            const clientId = "2u8c3k58lg83f0blfqn65vbnrf";
+            const redirectUri = encodeURIComponent("https://kamarkseit.github.io/project-chors/");
+            const scope = encodeURIComponent("openid email profile");
+            const url = `${domain}/signup?client_id=${clientId}&response_type=token&scope=${scope}&redirect_uri=${redirectUri}`;
+
+            document.getElementById("create-account").addEventListener("click", () => {
+                window.location.href = url;
+            });
+
             await ensureLocalChores(); // Waits for all internal async work
             //pollForResults();          // Runs after chores are ensured
             // Logout logic
