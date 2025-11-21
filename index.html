@@ -131,12 +131,14 @@
                             <div class="modal-body">
                                 <form id="updateChoreForm">
                                     <div class="mb-3">
-                                        <label for="choreId" class="form-label">Chore ID</label>
-                                        <input type="text" class="form-control" id="choreId" required>
+                                        <label for="choreIdSelect" class="form-label">Choose Chore ID</label>
+                                        <select class="form-select" id="choreIdSelect">
+                                            <option value="">-- Select a chore --</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
                                         <label for="choreName" class="form-label">Chore Name</label>
-                                        <input type="text" class="form-control" id="choreName" required>
+                                        <input type="text" class="form-control" id="choreName">
                                     </div>
                                     <div class="mb-3">
                                         <label for="choreInstr" class="form-label">Instruction</label>
