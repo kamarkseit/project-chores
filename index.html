@@ -434,7 +434,7 @@
             });
             choreSelect.addEventListener("change", () => {
                 const selectedId = choreSelect.value;
-                const chore = window.choreList.find(c => c.chore_id === selectedId);
+                const chore = data.find(c => c.chore_id === selectedId);
                 if (!chore) return;
 
                 // Fill fields
