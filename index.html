@@ -421,6 +421,30 @@
             const storedCompleted = localStorage.getItem("completedChores");
             const completedChores = storedCompleted ? JSON.parse(storedCompleted) : [];
             renderAnalytics(completedChores);
+
+            // Update chore section logic
+
+            const choreSelect = document.getElementById("choreIdSelect");
+            // Populate dropdown
+            data.forEach(chore => {
+                const opt = document.createElement("option");
+                opt.value = chore.chore_id;
+                opt.textContent = `${chore.chore_id} - ${chore.chore_name}`;
+                choreSelect.appendChild(opt);
+            });
+            choreSelect.addEventListener("change", () => {
+                const selectedId = choreSelect.value;
+                const chore = window.choreList.find(c => c.chore_id === selectedId);
+                if (!chore) return;
+
+                // Fill fields
+                document.getElementById("choreName").value = chore.chore_name || "";
+                document.getElementById("choreInstr").value = chore.instruction || "";
+                document.getElementById("dueDate").value = chore.next_due || "";
+                document.getElementById("interval").value = chore.interval_days || "";
+                document.getElementById("assignedTo").value = chore.assigned_to || "";
+                document.getElementById("theirEmail").value = chore.email || "";
+            });
         }
 
         function renderAnalytics(completedChores) {
