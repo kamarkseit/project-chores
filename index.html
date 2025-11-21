@@ -432,7 +432,7 @@
                 opt.textContent = `${chore.chore_id} - ${chore.chore_name}`;
                 choreSelect.appendChild(opt);
             });
-            choreSelect.addEventListener("change", () => {
+            choreSelect.onchange = () => {
                 const selectedId = choreSelect.value;
                 const chore = data.find(c => c.chore_id === selectedId);
                 if (!chore) return;
@@ -444,7 +444,7 @@
                 document.getElementById("interval").value = chore.interval_days || "";
                 document.getElementById("assignedTo").value = chore.assigned_to || "";
                 document.getElementById("theirEmail").value = chore.email || "";
-            });
+            };
         }
 
         function renderAnalytics(completedChores) {
