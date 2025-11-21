@@ -436,7 +436,7 @@
                 const selectedId = choreSelect.value;
                 const chore = data.find(c => c.chore_id === selectedId);
                 if (!chore) return;
-
+                console.log(chore)
                 // Fill fields
                 document.getElementById("choreName").value = chore.chore_name || "";
                 document.getElementById("choreInstr").value = chore.instruction || "";
