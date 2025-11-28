@@ -278,8 +278,8 @@
             // Update the values in the data
             const updated = data.map(entry => {
                 if (entry.chore_id === jobId) {
-                    const lastCompleted = new Date(entry.last_completed); // from JSON
-                    const diffInDays = Math.floor((nowCompleted - lastCompleted) / msPerDay);
+                    const lastDue = new Date(entry.next_due); // from JSON
+                    const diffInDays = Math.floor((nowCompleted - lastDue) / msPerDay);
                     entry.last_completed_with_DOD = diffInDays;
 
                     entry.last_completed = newDate;
