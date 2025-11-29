@@ -434,6 +434,8 @@
             });
             choreSelect.onchange = () => {
                 const selectedId = choreSelect.value;
+                console.log(typeof selectedId)
+                console.log(selectedId)
                 const chore = data.find(c => c.chore_id === selectedId);
                 if (!chore) return;
                 console.log(chore)
