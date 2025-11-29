@@ -433,7 +433,7 @@
                 choreSelect.appendChild(opt);
             });
             choreSelect.onchange = () => {
-                const selectedId = choreSelect.value;
+                const selectedId = parseInt(choreSelect.value, 10);
                 console.log(typeof selectedId)
                 console.log(selectedId)
                 const chore = data.find(c => c.chore_id === selectedId);
