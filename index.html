@@ -109,7 +109,7 @@
         <!-- Update Chore Section -->
         <div class="card mt-4">
             <div class="card-header bg-warning text-dark">
-                <h2 class="h5 mb-0">Update Chore</h2>
+                <h2 class="h5 mb-0">Update Family Chore List</h2>
             </div>
             <div class="card-body">
                 <!-- Trigger button -->
@@ -117,8 +117,12 @@
                     data-bs-target="#updateChoreModal">
                     Edit Chore
                 </button>
+                <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
+                    data-bs-target="#addChoreModal">
+                    Create A New Chore
+                </button>
 
-                <!-- Modal -->
+                <!-- Modal1 -->
                 <div class="modal fade" id="updateChoreModal" tabindex="-1" aria-labelledby="updateChoreLabel"
                     aria-hidden="true">
                     <div class="modal-dialog modal-lg">
@@ -187,9 +191,73 @@
                         </div>
                     </div>
                 </div>
+                <!-- Modal2 -->
+                <div class="modal fade" id="addChoreModal" tabindex="-1" aria-labelledby="addChoreLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary text-white">
+                                <h5 class="modal-title" id="addChoreLabel">New Chore Details</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="updateChoreForm">
+                                    <div class="mb-3">
+                                        <label for="choreIdSelect" class="form-label">New Chore ID</label>
+                                        <input type="number" class="form-control" id="choreIdNew" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="choreName" class="form-label">Chore Name</label>
+                                        <input type="text" class="form-control" id="choreName">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="choreInstr" class="form-label">Instruction</label>
+                                        <textarea class="form-control" id="choreInstr" rows="3"></textarea>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="dueDate" class="form-label">Due Date</label>
+                                            <input type="date" class="form-control" id="dueDate">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="interval" class="form-label">Interval Days</label>
+                                            <select class="form-select" id="interval">
+                                                <option value="7">7</option>
+                                                <option value="14">14</option>
+                                                <option value="21">21</option>
+                                                <option value="28">28</option>
+                                                <option value="60">60</option>
+                                                <option value="90">90</option>
+                                                <option value="120">120</option>
+                                                <option value="180">180</option>
+                                                <option value="360">360</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="assignedTo" class="form-label">Assigned To</label>
+                                            <input type="text" class="form-control" id="assignedTo" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="theirEmail" class="form-label">Their Email</label>
+                                            <input type="text" class="form-control" id="theirEmail" required>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="choreId">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" form="updateChoreForm" class="btn btn-success">Save
+                                    New Chore</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 
 
@@ -423,7 +491,9 @@
             const completedChores = storedCompleted ? JSON.parse(storedCompleted) : [];
             renderAnalytics(completedChores);
 
-            // Update chore section logic
+            // Update Family Chore List logic
+
+            // Edit Chore logic
 
             const choreSelect = document.getElementById("choreIdSelect");
             // Populate dropdown
@@ -448,7 +518,6 @@
             };
             document.getElementById("updateChoreForm").addEventListener("submit", async (e) => {
                 e.preventDefault();
-
                 // Update the values in the data and call it changedData
                 const changedData = data.map(entry => {
                     if (entry.chore_id === parseInt(document.getElementById("choreIdSelect").value, 10)) {
@@ -481,9 +550,8 @@
                     .then(data => console.log('Success:', data))
                     .catch(error => console.error('Error:', error));
 
-                // Re-fetch the data from DynamoDB for the up-to-date data
+                // Re-fetch the data from DynamoDB for the up-to-date data                                        still need to refetch to update the page!!!
                 alert(`Chore ${changedItem.chore_id} was sucessfully changes!`);
-                console.log(changedItem)
             });
 
             // If user wants to delete a chore and clicks Delete Chore
@@ -521,9 +589,50 @@
                     .then(data => console.log('Success:', data))
                     .catch(error => console.error('Error:', error));
 
-                // Re-fetch the data from DynamoDB for the up-to-date data
+                // Re-fetch the data from DynamoDB for the up-to-date data                                          still need to refetch to update the page!!!
                 alert(`Chore ${changedItem.chore_id} was sucessfully deleted!`);
-                console.log(changedItem)
+            });
+
+            //Create A New Chore Logic
+
+            //Find a new chore id number based on the data
+            const maxId = Math.max(...data.map(c => Number(c.chore_id)));
+            document.getElementById("choreIdNew").value = maxId + 1;
+
+            document.getElementById("addChoreForm").addEventListener("submit", async (e) => {
+                e.preventDefault();
+                // Add new chore to the main data and call it newChoreData
+                const newChoreData = data.map(entry => {
+                    entry.chore_id === parseInt(document.getElementById("choreIdNew").value, 10);
+                    entry.chore_name = document.getElementById("choreName").value;
+                    entry.instruction = document.getElementById("choreInstr").value;
+                    entry.next_due = document.getElementById("dueDate").value;
+                    entry.interval_days = parseInt(document.getElementById("interval").value, 10);
+                    entry.assigned_to = document.getElementById("assignedTo").value;
+                    entry.email = document.getElementById("theirEmail").value;
+                    entry.chore_status = "complete";
+                    entry.days_overdue = 0;
+                });
+                const newItem = newChoreData.find(entry => entry.chore_id === parseInt(document.getElementById("choreIdNew").value, 10));
+                const token = getTokenFromUrl();
+                if (!token) {
+                    console.error("No token found. Please log in first.");
+                    return;
+                }
+                fetch('https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod/update-json', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(newItem)
+                })
+                    .then(response => response.json())
+                    .then(data => console.log('Success:', data))
+                    .catch(error => console.error('Error:', error));
+
+                // Re-fetch the data from DynamoDB for the up-to-date data                                        still need to refetch to update the page!!!
+                alert(`New chore ${newItem.chore_id} was sucessfully saved!`);
             });
         }
 
