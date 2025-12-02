@@ -268,7 +268,6 @@
             // Grab the data from local storage
             const stored = localStorage.getItem("currentChores");
             const data = stored ? JSON.parse(stored) : [];
-            //const data = Array.isArray(parsed) ? parsed : Object.values(parsed);                     may need to delete ... redundant
             // Recalculate the nextDue date
             const nextDue = new Date(newDate); // Convert string to Date object
             // Recalculate days that a completed chore was overdue before marked complete
@@ -295,7 +294,7 @@
             const updatedItem = updated.find(entry => entry.chore_id === jobId);
 
             // Send updated data to API
-            const token = new URLSearchParams(window.location.hash.substring(1)).get('id_token')
+            const token = new URLSearchParams(window.location.hash.substring(1)).get('id_token') // later can utilize the function for the token ????
             if (!token) {
                 console.error("No token found. Please log in first.");
                 return;
@@ -434,8 +433,6 @@
             });
             choreSelect.onchange = () => {
                 const selectedId = parseInt(choreSelect.value, 10);
-                console.log(typeof selectedId)
-                console.log(selectedId)
                 const chore = data.find(c => c.chore_id === selectedId);
                 if (!chore) return;
                 console.log(chore)
@@ -447,6 +444,46 @@
                 document.getElementById("assignedTo").value = chore.assigned_to || "";
                 document.getElementById("theirEmail").value = chore.email || "";
             };
+            document.getElementById("updateChoreForm").addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                // Update the values in the data and call it changedData
+                const changedData = data.map(entry => {
+                    if (entry.chore_id === parseInt(document.getElementById("choreIdSelect").value, 10)) {
+                        entry.chore_name = document.getElementById("choreName").value;
+                        entry.instruction = document.getElementById("choreInstr").value;
+                        entry.next_due = document.getElementById("dueDate").value;
+                        entry.interval_days = parseInt(document.getElementById("interval").value, 10);
+                        entry.assigned_to = document.getElementById("assignedTo").value;
+                        entry.email = document.getElementById("theirEmail").value;
+                        entry.chore_status = "complete";
+                        entry.days_overdue = 0;
+                    }
+                    return entry;
+                });
+                const changedItem = changedData.find(entry => entry.chore_id === parseInt(document.getElementById("choreIdSelect").value, 10));
+                const token = getTokenFromUrl();
+                if (!token) {
+                    console.error("No token found. Please log in first.");
+                    return;
+                }
+                fetch('https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod/update-json', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(changedItem)
+                })
+                    .then(response => response.json())
+                    .then(data => console.log('Success:', data))
+                    .catch(error => console.error('Error:', error));
+
+                // Re-fetch the data from DynamoDB for the up-to-date data
+                alert(`Chore ${jobId} was sucessfully changes!`);
+                console.log(changedItem)
+            });
+
         }
 
         function renderAnalytics(completedChores) {
