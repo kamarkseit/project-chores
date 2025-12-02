@@ -486,6 +486,45 @@
                 console.log(changedItem)
             });
 
+            // If user wants to delete a chore and clicks Delete Chore
+            document.getElementById("deleteChoreBtn").addEventListener("click", async (e) => {
+                e.preventDefault();
+                // Update the values in the data and call it changedData
+                const changedData = data.map(entry => {
+                    if (entry.chore_id === parseInt(document.getElementById("choreIdSelect").value, 10)) {
+                        entry.chore_name = document.getElementById("choreName").value;
+                        entry.instruction = document.getElementById("choreInstr").value;
+                        entry.next_due = document.getElementById("dueDate").value;
+                        entry.interval_days = parseInt(document.getElementById("interval").value, 10);
+                        entry.assigned_to = document.getElementById("assignedTo").value;
+                        entry.email = document.getElementById("theirEmail").value;
+                        entry.chore_status = "delete";
+                        entry.days_overdue = 0;
+                    }
+                    return entry;
+                });
+                const changedItem = changedData.find(entry => entry.chore_id === parseInt(document.getElementById("choreIdSelect").value, 10));
+                const token = getTokenFromUrl();
+                if (!token) {
+                    console.error("No token found. Please log in first.");
+                    return;
+                }
+                fetch('https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod/update-json', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(changedItem)
+                })
+                    .then(response => response.json())
+                    .then(data => console.log('Success:', data))
+                    .catch(error => console.error('Error:', error));
+
+                // Re-fetch the data from DynamoDB for the up-to-date data
+                alert(`Chore ${changedItem.chore_id} was sucessfully deleted!`);
+                console.log(changedItem)
+            });
         }
 
         function renderAnalytics(completedChores) {
