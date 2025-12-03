@@ -615,6 +615,7 @@
                     chore_status: "new",
                     days_overdue: 0
                 };
+                console.log(newChore)
                 const newChoreData = [...data, newChore];
                 const newItem = newChoreData.find(entry => entry.chore_id === parseInt(document.getElementById("choreIdNew").value, 10));
                 console.log(newItem)
@@ -629,7 +630,7 @@
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify(newItem)
+                    body: JSON.stringify(newChore)
                 })
                     .then(response => response.json())
                     .then(data => console.log('Success:', data))
