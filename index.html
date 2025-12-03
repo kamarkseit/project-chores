@@ -602,17 +602,18 @@
             document.getElementById("addChoreForm").addEventListener("submit", async (e) => {
                 e.preventDefault();
                 // Add new chore to the main data and call it newChoreData
-                const newChoreData = data.map(entry => {
-                    entry.chore_id === parseInt(document.getElementById("choreIdNew").value, 10);
-                    entry.chore_name = document.getElementById("choreName").value;
-                    entry.instruction = document.getElementById("choreInstr").value;
-                    entry.next_due = document.getElementById("dueDate").value;
-                    entry.interval_days = parseInt(document.getElementById("interval").value, 10);
-                    entry.assigned_to = document.getElementById("assignedTo").value;
-                    entry.email = document.getElementById("theirEmail").value;
-                    entry.chore_status = "complete";
-                    entry.days_overdue = 0;
-                });
+                const newChore = {
+                    chore_id: parseInt(document.getElementById("choreIdNew").value, 10),
+                    chore_name: document.getElementById("choreName").value,
+                    instruction: document.getElementById("choreInstr").value,
+                    next_due: document.getElementById("dueDate").value,
+                    interval_days: parseInt(document.getElementById("interval").value, 10),
+                    assigned_to: document.getElementById("assignedTo").value,
+                    email: document.getElementById("theirEmail").value,
+                    chore_status: "complete",
+                    days_overdue: 0
+                };
+                const newChoreData = [...data, newChore];
                 const newItem = newChoreData.find(entry => entry.chore_id === parseInt(document.getElementById("choreIdNew").value, 10));
                 const token = getTokenFromUrl();
                 if (!token) {
