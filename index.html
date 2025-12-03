@@ -606,19 +606,17 @@
                 const newChore = {
                     family_id: findFamilyId,
                     chore_id: parseInt(document.getElementById("choreIdNew").value, 10),
-                    chore_name: document.getElementById("choreName").value,
-                    instruction: document.getElementById("choreInstr").value,
-                    next_due: document.getElementById("dueDate").value,
-                    interval_days: parseInt(document.getElementById("interval").value, 10),
-                    assigned_to: document.getElementById("assignedTo").value,
-                    email: document.getElementById("theirEmail").value,
+                    chore_name: document.getElementById("choreNameNew").value,
+                    instruction: document.getElementById("choreInstrNew").value,
+                    next_due: document.getElementById("dueDateNew").value,
+                    interval_days: parseInt(document.getElementById("intervalNew").value, 10),
+                    assigned_to: document.getElementById("assignedToNew").value,
+                    email: document.getElementById("theirEmailNew").value,
                     chore_status: "new",
                     days_overdue: 0
                 };
-                console.log(newChore)
                 const newChoreData = [...data, newChore];
                 const newItem = newChoreData.find(entry => entry.chore_id === parseInt(document.getElementById("choreIdNew").value, 10));
-                console.log(newItem)
                 const token = getTokenFromUrl();
                 if (!token) {
                     console.error("No token found. Please log in first.");
@@ -630,7 +628,7 @@
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify(newChore)
+                    body: JSON.stringify(newItem)
                 })
                     .then(response => response.json())
                     .then(data => console.log('Success:', data))
