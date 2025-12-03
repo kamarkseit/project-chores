@@ -491,9 +491,9 @@
             const completedChores = storedCompleted ? JSON.parse(storedCompleted) : [];
             renderAnalytics(completedChores);
 
-            // Update Family Chore List logic
+            // Update Family Chore List Section
 
-            // Edit Chore logic
+            // Edit Chore Section
 
             const choreSelect = document.getElementById("choreIdSelect");
             // Populate dropdown
@@ -527,7 +527,7 @@
                         entry.interval_days = parseInt(document.getElementById("interval").value, 10);
                         entry.assigned_to = document.getElementById("assignedTo").value;
                         entry.email = document.getElementById("theirEmail").value;
-                        entry.chore_status = "complete";
+                        entry.chore_status = "changed";
                         entry.days_overdue = 0;
                     }
                     return entry;
@@ -610,7 +610,7 @@
                     interval_days: parseInt(document.getElementById("interval").value, 10),
                     assigned_to: document.getElementById("assignedTo").value,
                     email: document.getElementById("theirEmail").value,
-                    chore_status: "complete",
+                    chore_status: "new",
                     days_overdue: 0
                 };
                 const newChoreData = [...data, newChore];
