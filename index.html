@@ -596,7 +596,9 @@
             //Create A New Chore Logic
 
             //Find a new chore id number based on the data
-            const findFamilyId = data[0].family_id;
+            const token = localStorage.getItem('idToken')
+            console.log(token)
+            const findFamilyId = data[0].family_id;   //bad need new approach
             const maxId = Math.max(...data.map(c => Number(c.chore_id)));
             document.getElementById("choreIdNew").value = maxId + 1;
 
