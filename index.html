@@ -597,16 +597,17 @@
 
             //Find a new chore id number based on the data
             const token = localStorage.getItem('idToken')
-            console.log(token)
-            const findFamilyId = data[0].family_id;   //bad need new approach
-            const maxId = Math.max(...data.map(c => Number(c.chore_id)));
+            //const findFamilyId = data[0].family_id;   //bad, need new approach
+            let maxId = 0;
+            if (data.length > 0) {
+                maxId = Math.max(...data.map(c => Number(c.chore_id)));
+            }
             document.getElementById("choreIdNew").value = maxId + 1;
 
             document.getElementById("addChoreForm").addEventListener("submit", async (e) => {
                 e.preventDefault();
                 // Add new chore to the main data and call it newChoreData
                 const newChore = {
-                    family_id: findFamilyId,
                     chore_id: parseInt(document.getElementById("choreIdNew").value, 10),
                     chore_name: document.getElementById("choreNameNew").value,
                     instruction: document.getElementById("choreInstrNew").value,
