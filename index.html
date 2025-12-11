@@ -426,7 +426,7 @@
             container.innerHTML = "";
             const history_log = [];
             data.forEach(entry => {
-                const completedDate = new Date(entry.last_completed + "T00:00:00Z");
+                const completedDate = new Date(entry.last_completed);
                 if (
                     completedDate.getMonth() === currentMonth &&
                     completedDate.getFullYear() === currentYear
