@@ -426,10 +426,10 @@
             container.innerHTML = "";
             const history_log = [];
             data.forEach(entry => {
-                const completedDate = new Date(entry.last_completed);
+                const completedDate = new Date(entry.last_completed + "T00:00:00Z");
                 if (
-                    completedDate.getMonth() === currentMonth &&
-                    completedDate.getFullYear() === currentYear
+                    completedDate.getUTCMonth() === currentMonth &&
+                    completedDate.getUTCFullYear() === currentYear
                 ) {
                     history_log.push(`${entry.last_completed}: ${entry.chore_name} by ${entry.assigned_to}`);
                 }
