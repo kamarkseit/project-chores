@@ -821,7 +821,7 @@
             localStorage.setItem("idToken", token);
 
             // Fetch and render chores
-            refreshUI();
+            await refreshUI();
 
             // Attach CRUD handlers once
             createNewChores();
