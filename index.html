@@ -474,6 +474,7 @@
 
 
             // --- Populate participant dropdown ---
+            console.log(currentChores)
             const select = document.getElementById("participant-select");
             select.innerHTML = '<option value="">------Select------</option>'; // reset
             const participants = [...new Set(currentChores.map(entry => entry.assigned_to))];
@@ -488,7 +489,7 @@
             // Attach listener once
             select.onchange = () => {
                 const selected = select.value;
-                showJobsForParticipant(currentChores, selected);
+                showJobsForParticipant(currentChores, selected); //see this function above!
             };
 
 
@@ -813,15 +814,20 @@
             localStorage.removeItem("completedChores");
             // Get the token
             const token = getTokenFromUrl();
-            // Fetch data from DynamoDB
-            if (token) {
-                localStorage.setItem("idToken", token);
-                await fetchData();
-                refreshUI();
-            } else {
+            if (!token) {
                 alert("Please login first!");
                 return;
             }
+            localStorage.setItem("idToken", token);
+
+            // Fetch and render chores
+            refreshUI();
+
+            // Attach CRUD handlers once
+            createNewChores();
+            editChores();
+            deleteChores();
+
             // Logout logic
             document.getElementById('logoutBtn').addEventListener('click', () => {
                 // Clear token/session and the chores data
