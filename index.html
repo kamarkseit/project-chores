@@ -843,7 +843,9 @@
         let choresByPersonChart = null;
         let choresOverTimeChart = null;
         let avgCompletionChart = null;
-        init();
+        document.addEventListener("DOMContentLoaded", () => {
+            init(); // run once when the DOM is ready
+        });
     </script>
 </body>
 
