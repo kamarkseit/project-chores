@@ -287,6 +287,8 @@
 
         // Fetch json data that is stored in DynamoDB using API Gateway and Cognito
         async function fetchData() {
+            localStorage.removeItem("currentChores");
+            localStorage.removeItem("completedChores");
             const token = localStorage.getItem("idToken");
             if (!token) {
                 alert("Please log in to view chores.");
