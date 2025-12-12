@@ -435,6 +435,7 @@
             const currentMonth = now.getMonth(); // 0-indexed: October = 9
             const currentYear = now.getFullYear();
 
+
             // --- History log logic ---
             const historyContainer = document.getElementById("history-log");
             historyContainer.innerHTML = "";
@@ -455,6 +456,7 @@
                 ? "No job was completed this month."
                 : `<ul>${history_log.map(job => `<li>${job}</li>`).join('')}</ul>`;
 
+
             // --- Due Chores log logic ---
             const dueContainer = document.getElementById("due-chores-log");
             dueContainer.innerHTML = "";
@@ -470,10 +472,11 @@
                 ? "No jobs are due today."
                 : `<ul>${due_log.map(job => `<li>${job}</li>`).join('')}</ul>`;
 
+
             // --- Populate participant dropdown ---
             const select = document.getElementById("participant-select");
             select.innerHTML = '<option value="">------Select------</option>'; // reset
-            const participants = [...new Set(completedChores.map(entry => entry.assigned_to))];
+            const participants = [...new Set(currentChores.map(entry => entry.assigned_to))];
 
             participants.forEach(name => {
                 const option = document.createElement("option");
@@ -485,8 +488,9 @@
             // Attach listener once
             select.onchange = () => {
                 const selected = select.value;
-                showJobsForParticipant(completedChores, selected);
+                showJobsForParticipant(currentChores, selected);
             };
+
 
             // --- Analytics section logic ---
             renderAnalytics(completedChores);
