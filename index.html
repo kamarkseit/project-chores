@@ -322,29 +322,29 @@
                     document.getElementById("choresByPerson").classList.remove("spinner-border");
                     document.getElementById("choresOverTime").classList.remove("spinner-border");
                     document.getElementById("avgCompletion").classList.remove("spinner-border");
-                    await pollForResults();
+                    //await pollForResults();
                 }
             } catch (err) {
                 console.log("Error fetching data.");
             }
         }
-        // Gets the token and fetchs json data                          Should I rename this function?????
-        async function ensureLocalChores() {
-            localStorage.removeItem("currentChores");
-            localStorage.removeItem("completedChores");
+        // // Gets the token and fetchs json data                          DELETE ?????
+        // async function ensureLocalChores() {
+        //     localStorage.removeItem("currentChores");
+        //     localStorage.removeItem("completedChores");
 
-            const token = getTokenFromUrl();
-            if (token) {
-                localStorage.setItem("idToken", token);
-                fetchData();
-            } else {
-                alert("Please login first!");
-                return;
-            }
-        }
+        //     const token = getTokenFromUrl();
+        //     if (token) {
+        //         localStorage.setItem("idToken", token);
+        //         fetchData();
+        //     } else {
+        //         alert("Please login first!");
+        //         return;
+        //     }
+        // }
 
         // Function is used to modify data and send it to S3 using API Gateway
-        function markComplete(jobId) {
+        async function markComplete(jobId) {
             // Grab the Date Input Inside
             const input = document.getElementById(`date-${jobId}`);
             const newDate = input.value;
@@ -400,8 +400,12 @@
 
             // Re-fetch the data from DynamoDB for the up-to-date data
             showToast("Chore marked complete ✅");
-            fetchData();
-            // ???? May need to automatically reload the page here ????
+            try {
+                await fetchData();
+                pollForResults();
+            } catch (err) {
+                console.log("Error fetching data and polling");
+            }
         }
 
         function showJobsForParticipant(data, name) {
@@ -537,7 +541,6 @@
                 const selectedId = parseInt(choreSelect.value, 10);
                 const chore = data.find(c => c.chore_id === selectedId);
                 if (!chore) return;
-                console.log(chore)
                 // Fill fields
                 document.getElementById("choreName").value = chore.chore_name || "";
                 document.getElementById("choreInstr").value = chore.instruction || "";
@@ -773,8 +776,20 @@
 
         // Main function is here
         async function init() {
-            await ensureLocalChores(); // Waits for all internal async work
-            //pollForResults();          // Runs after chores are ensured
+            // Clear local storage
+            localStorage.removeItem("currentChores");
+            localStorage.removeItem("completedChores");
+            // Get the token
+            const token = getTokenFromUrl();
+            // Fetch data from DynamoDB
+            if (token) {
+                localStorage.setItem("idToken", token);
+                await fetchData();
+                pollForResults();
+            } else {
+                alert("Please login first!");
+                return;
+            }
             // Logout logic
             document.getElementById('logoutBtn').addEventListener('click', () => {
                 // Clear token/session and the chores data
