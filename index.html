@@ -402,9 +402,9 @@
             showToast("Chore marked complete ✅");
             try {
                 await fetchData();
-                pollForResults();
+                await pollForResults();
             } catch (err) {
-                console.log("Error fetching data and polling");
+                console.log("Error fetching data and polling in markComplete");
             }
         }
 
