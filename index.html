@@ -289,11 +289,16 @@
         async function fetchData() {
             localStorage.removeItem("currentChores");
             localStorage.removeItem("completedChores");
+
             const token = localStorage.getItem("idToken");
             if (!token) {
                 alert("Please log in to view chores.");
-                return;
+                return { currentChores: [], completedChores: [] };
             }
+
+            let currentChores = [];
+            let completedChores = [];
+
             try {
                 document.getElementById("history-log").classList.add("spinner-border");
                 document.getElementById("due-chores-log").classList.add("spinner-border");
@@ -307,13 +312,14 @@
                         "Authorization": `Bearer ${token}`
                     }
                 });
+
                 if (response.ok) {
                     const result = await response.json();
-                    const data = result.chores;   // unified array with status field
+                    const data = result.chores || [];   // unified array with status field
 
                     // Separate current vs completed data
-                    const currentChores = data.filter(chore => chore.status === "current");
-                    const completedChores = data.filter(chore => chore.status === "completed");
+                    currentChores = data.filter(chore => chore.status === "current");
+                    completedChores = data.filter(chore => chore.status === "completed");
 
                     localStorage.setItem("currentChores", JSON.stringify(currentChores));
                     localStorage.setItem("completedChores", JSON.stringify(completedChores));
@@ -325,8 +331,9 @@
                     document.getElementById("avgCompletion").classList.remove("spinner-border");
                 }
             } catch (err) {
-                console.log("Error fetching data in fetchData");
+                console.log("Error fetching data in fetchData", err);
             }
+
             return { currentChores, completedChores };
         }
 
