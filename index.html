@@ -317,31 +317,24 @@
 
                     localStorage.setItem("currentChores", JSON.stringify(currentChores));
                     localStorage.setItem("completedChores", JSON.stringify(completedChores));
+
                     document.getElementById("history-log").classList.remove("spinner-border");
                     document.getElementById("due-chores-log").classList.remove("spinner-border");
                     document.getElementById("choresByPerson").classList.remove("spinner-border");
                     document.getElementById("choresOverTime").classList.remove("spinner-border");
                     document.getElementById("avgCompletion").classList.remove("spinner-border");
-                    pollForResults(currentChores, completedChores);
                 }
             } catch (err) {
-                console.log("Error fetching data.");
+                console.log("Error fetching data in fetchData");
             }
+            return { currentChores, completedChores };
         }
-        // // Gets the token and fetchs json data                          DELETE ?????
-        // async function ensureLocalChores() {
-        //     localStorage.removeItem("currentChores");
-        //     localStorage.removeItem("completedChores");
 
-        //     const token = getTokenFromUrl();
-        //     if (token) {
-        //         localStorage.setItem("idToken", token);
-        //         fetchData();
-        //     } else {
-        //         alert("Please login first!");
-        //         return;
-        //     }
-        // }
+        // Refreshing User Interface function
+        async function refreshUI() {
+            const { currentChores, completedChores } = await fetchData();
+            pollForResults(currentChores, completedChores);
+        }
 
         // Function is used to modify data and send it to S3 using API Gateway
         async function markComplete(jobId) {
@@ -400,11 +393,8 @@
 
             // Re-fetch the data from DynamoDB for the up-to-date data
             showToast("Chore marked complete ✅");
-            try {
-                fetchData();
-            } catch (err) {
-                console.log("Error fetching data and polling in markComplete");
-            }
+            await fetchData();
+            refreshUI();
         }
 
         function showJobsForParticipant(data, name) {
@@ -432,21 +422,18 @@
             });
         }
 
-        async function pollForResults(currentChores, completedChores) {
-            // const stored = localStorage.getItem("currentChores");
-            // const data = stored ? JSON.parse(stored) : [];
-            const data = currentChores;
-
+        function pollForResults(currentChores, completedChores) {
             // Find today's date, month, and year.
             const now = new Date();
             const currentMonth = now.getMonth(); // 0-indexed: October = 9
             const currentYear = now.getFullYear();
 
-            // History log logic
-            const container = document.getElementById("history-log");
-            container.innerHTML = "";
+            // --- History log logic ---
+            const historyContainer = document.getElementById("history-log");
+            historyContainer.innerHTML = "";
             const history_log = [];
-            data.forEach(entry => {
+
+            completedChores.forEach(entry => {
                 const completedDate = new Date(entry.last_completed + "T00:00:00Z");
                 if (
                     completedDate.getUTCMonth() === currentMonth &&
@@ -455,39 +442,28 @@
                     history_log.push(`${entry.last_completed}: ${entry.chore_name} by ${entry.assigned_to}`);
                 }
             });
-            history_log.sort();
-            if (history_log.length === 0) {
-                container.textContent = "No job was completed this month.";
-            } else {
-                const choreList = history_log
-                    .map(job => `<li>${job}</li>`)
-                    .join('');
-                container.innerHTML = `<ul>${choreList}</ul>`;
-            }
 
-            // Due Chores log logic
-            const container2 = document.getElementById("due-chores-log");
-            container2.innerHTML = "";
+            history_log.sort();
+            historyContainer.innerHTML = history_log.length === 0
+                ? "No job was completed this month."
+                : `<ul>${history_log.map(job => `<li>${job}</li>`).join('')}</ul>`;
+
+            // --- Due Chores log logic ---
+            const dueContainer = document.getElementById("due-chores-log");
+            dueContainer.innerHTML = "";
             const due_log = [];
-            data.forEach(entry => {
-                const choreStatus = entry.chore_status;
-                if (
-                    choreStatus === "due"
-                ) {
+
+            currentChores.forEach(entry => {
+                if (entry.chore_status === "due") {
                     due_log.push(`${entry.chore_name} is ${entry.days_overdue} days overdue for ${entry.assigned_to}`);
                 }
             });
 
-            if (due_log.length === 0) {
-                container2.textContent = "No jobs are due today.";
-            } else {
-                const dueChoreList = due_log
-                    .map(job => `<li>${job}</li>`)
-                    .join('');
-                container2.innerHTML = `<ul>${dueChoreList}</ul>`;
-            }
+            dueContainer.innerHTML = due_log.length === 0
+                ? "No jobs are due today."
+                : `<ul>${due_log.map(job => `<li>${job}</li>`).join('')}</ul>`;
 
-            // Populate participant dropdown
+            // --- Populate participant dropdown ---
             const select = document.getElementById("participant-select");
             select.innerHTML = '<option value="">------Select------</option>'; // reset
             const participants = [...new Set(data.map(entry => entry.assigned_to))];
@@ -505,43 +481,46 @@
                 showJobsForParticipant(data, selected);
             };
 
-            // Analytics section logic
-
-            // Load completed chores from localStorage
-            // const storedCompleted = localStorage.getItem("completedChores");
-            // const completedChores = storedCompleted ? JSON.parse(storedCompleted) : [];
+            // --- Analytics section logic ---
             renderAnalytics(completedChores);
+        }
 
-            // Update Family Chore List Section
+        async function editChores() {
+            const token = localStorage.getItem('idToken');
+            if (!token) {
+                alert("Please log in to edit chores.");
+                return;
+            }
 
-            // Edit Chore Section
-
-            // Calculate tomorrow's date
+            // Restrict due date to tomorrow or later
             const tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
-            // Format as YYYY-MM-DD
             const yyyy = tomorrow.getFullYear();
             const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
             const dd = String(tomorrow.getDate()).padStart(2, '0');
             const minDate = `${yyyy}-${mm}-${dd}`;
-
-            // Apply to the input
             document.getElementById("dueDate").setAttribute("min", minDate);
             document.getElementById("dueDateNew").setAttribute("min", minDate);
 
-            const choreSelect = document.getElementById("choreIdSelect");
+            // Load chores from localStorage
+            const stored = localStorage.getItem("currentChores");
+            const chores = stored ? JSON.parse(stored) : [];
+
             // Populate dropdown
-            data.forEach(chore => {
+            const choreSelect = document.getElementById("choreIdSelect");
+            choreSelect.innerHTML = ""; // clear old options
+            chores.forEach(chore => {
                 const opt = document.createElement("option");
                 opt.value = chore.chore_id;
                 opt.textContent = `${chore.chore_id} - ${chore.chore_name}`;
                 choreSelect.appendChild(opt);
             });
+
+            // Fill form fields when a chore is selected
             choreSelect.onchange = () => {
                 const selectedId = parseInt(choreSelect.value, 10);
-                const chore = data.find(c => c.chore_id === selectedId);
+                const chore = chores.find(c => c.chore_id === selectedId);
                 if (!chore) return;
-                // Fill fields
                 document.getElementById("choreName").value = chore.chore_name || "";
                 document.getElementById("choreInstr").value = chore.instruction || "";
                 document.getElementById("dueDate").value = chore.next_due || "";
@@ -549,97 +528,133 @@
                 document.getElementById("assignedTo").value = chore.assigned_to || "";
                 document.getElementById("theirEmail").value = chore.email || "";
             };
-            document.getElementById("updateChoreForm").addEventListener("submit", async (e) => {
+
+            //Attach submit handler only once
+            const form = document.getElementById("updateChoreForm");
+            form.onsubmit = async (e) => {
                 e.preventDefault();
-                // Update the values in the data and call it changedData
-                const changedData = data.map(entry => {
-                    if (entry.chore_id === parseInt(document.getElementById("choreIdSelect").value, 10)) {
-                        entry.chore_name = document.getElementById("choreName").value;
-                        entry.instruction = document.getElementById("choreInstr").value;
-                        entry.next_due = document.getElementById("dueDate").value;
-                        entry.interval_days = parseInt(document.getElementById("interval").value, 10);
-                        entry.assigned_to = document.getElementById("assignedTo").value;
-                        entry.email = document.getElementById("theirEmail").value;
-                        entry.chore_status = "changed";
-                        entry.days_overdue = 0;
-                    }
-                    return entry;
-                });
-                const changedItem = changedData.find(entry => entry.chore_id === parseInt(document.getElementById("choreIdSelect").value, 10));
-                const token = getTokenFromUrl();
-                if (!token) {
-                    console.error("No token found. Please log in first.");
-                    return;
+
+                const selectedId = parseInt(choreSelect.value, 10);
+                const chore = chores.find(c => c.chore_id === selectedId);
+                if (!chore) return;
+
+                // Update fields
+                chore.chore_name = document.getElementById("choreName").value;
+                chore.instruction = document.getElementById("choreInstr").value;
+                chore.next_due = document.getElementById("dueDate").value;
+                chore.interval_days = parseInt(document.getElementById("interval").value, 10);
+                chore.assigned_to = document.getElementById("assignedTo").value;
+                chore.email = document.getElementById("theirEmail").value;
+                chore.chore_status = "changed";
+                chore.days_overdue = 0;
+
+                try {
+                    const response = await fetch(
+                        "https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod/update-json",
+                        {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${token}`
+                            },
+                            body: JSON.stringify(chore)
+                        }
+                    );
+
+                    if (!response.ok) throw new Error("Failed to update chore");
+                    const result = await response.json();
+                    console.log("Success:", result);
+
+                    showToast(`Chore ${chore.chore_id} was successfully updated ✅`);
+
+                    // Refresh UI with latest data
+                    const { currentChores, completedChores } = await fetchData();
+                    pollForResults(currentChores, completedChores);
+
+                } catch (error) {
+                    console.error("Error:", error);
+                    showToast("Error updating chore ❌");
                 }
-                fetch('https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod/update-json', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify(changedItem)
-                })
-                    .then(response => response.json())
-                    .then(data => console.log('Success:', data))
-                    .catch(error => console.error('Error:', error));
+            };
+        }
 
-                // Re-fetch the data from DynamoDB for the up-to-date data                                        still need to refetch to update the page!!!
-                alert(`Chore ${changedItem.chore_id} was sucessfully changes!`);
-            });
-
-            // If user wants to delete a chore and clicks Delete Chore
-            document.getElementById("deleteChoreBtn").addEventListener("click", async (e) => {
-                e.preventDefault();
-                // Update the values in the data and call it changedData
-                const changedData = data.map(entry => {
-                    if (entry.chore_id === parseInt(document.getElementById("choreIdSelect").value, 10)) {
-                        entry.chore_name = document.getElementById("choreName").value;
-                        entry.instruction = document.getElementById("choreInstr").value;
-                        entry.next_due = document.getElementById("dueDate").value;
-                        entry.interval_days = parseInt(document.getElementById("interval").value, 10);
-                        entry.assigned_to = document.getElementById("assignedTo").value;
-                        entry.email = document.getElementById("theirEmail").value;
-                        entry.chore_status = "delete";
-                        entry.days_overdue = 0;
-                    }
-                    return entry;
-                });
-                const changedItem = changedData.find(entry => entry.chore_id === parseInt(document.getElementById("choreIdSelect").value, 10));
-                const token = getTokenFromUrl();
-                if (!token) {
-                    console.error("No token found. Please log in first.");
-                    return;
-                }
-                fetch('https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod/update-json', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify(changedItem)
-                })
-                    .then(response => response.json())
-                    .then(data => console.log('Success:', data))
-                    .catch(error => console.error('Error:', error));
-
-                // Re-fetch the data from DynamoDB for the up-to-date data                                          still need to refetch to update the page!!!
-                alert(`Chore ${changedItem.chore_id} was sucessfully deleted!`);
-            });
-
-            //Create A New Chore Logic
-
-            //Find a new chore id number based on the data
-            const token = localStorage.getItem('idToken')
-            //const findFamilyId = data[0].family_id;   //bad, need new approach
-            let maxId = 0;
-            if (data.length > 0) {
-                maxId = Math.max(...data.map(c => Number(c.chore_id)));
+        async function deleteChores() {
+            const token = localStorage.getItem('idToken');
+            if (!token) {
+                alert("Please log in to delete chores.");
+                return;
             }
+            // Load chores from localStorage
+            const stored = localStorage.getItem("currentChores");
+            const chores = stored ? JSON.parse(stored) : [];
+
+            const deleteBtn = document.getElementById("deleteChoreBtn");
+            deleteBtn.onclick = async (e) => {
+                e.preventDefault();
+
+                const selectedId = parseInt(document.getElementById("choreIdSelect").value, 10);
+                const chore = chores.find(c => c.chore_id === selectedId);
+                if (!chore) return;
+
+                // Mark chore as deleted
+                chore.chore_name = document.getElementById("choreName").value;
+                chore.instruction = document.getElementById("choreInstr").value;
+                chore.next_due = document.getElementById("dueDate").value;
+                chore.interval_days = parseInt(document.getElementById("interval").value, 10);
+                chore.assigned_to = document.getElementById("assignedTo").value;
+                chore.email = document.getElementById("theirEmail").value;
+                chore.chore_status = "delete";
+                chore.days_overdue = 0;
+
+                try {
+                    const response = await fetch(
+                        "https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod/update-json",
+                        {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${token}`
+                            },
+                            body: JSON.stringify(chore)
+                        }
+                    );
+
+                    if (!response.ok) throw new Error("Failed to delete chore");
+                    const result = await response.json();
+                    console.log("Success:", result);
+
+                    showToast(`Chore ${chore.chore_id} was successfully deleted ✅`);
+
+                    // Refresh UI with latest data
+                    const { currentChores, completedChores } = await fetchData();
+                    pollForResults(currentChores, completedChores);
+
+                } catch (error) {
+                    console.error("Error:", error);
+                    showToast("Error deleting chore ❌");
+                }
+            };
+        }
+
+        async function createNewChores() {
+            const token = localStorage.getItem('idToken')
+            if (!token) {
+                alert("Please log in to add new chores.");
+                return;
+            }
+            // Find max chore_id from current data in localStorage
+            const stored = localStorage.getItem("currentChores");
+            const allChores = stored ? JSON.parse(stored) : [];
+            let maxId = allChores.length > 0 ? Math.max(...allChores.map(c => Number(c.chore_id))) : 0;
+
+            // Pre-fill next chore ID
             document.getElementById("choreIdNew").value = maxId + 1;
 
-            document.getElementById("addChoreForm").addEventListener("submit", async (e) => {
+            // Attach listener only once
+            const form = document.getElementById("addChoreForm");
+            form.onsubmit = async (e) => {
                 e.preventDefault();
-                // Add new chore to the main data and call it newChoreData
+
                 const newChore = {
                     chore_id: parseInt(document.getElementById("choreIdNew").value, 10),
                     chore_name: document.getElementById("choreNameNew").value,
@@ -651,28 +666,34 @@
                     chore_status: "new",
                     days_overdue: 0
                 };
-                const newChoreData = [...data, newChore];
-                const newItem = newChoreData.find(entry => entry.chore_id === parseInt(document.getElementById("choreIdNew").value, 10));
-                const token = getTokenFromUrl();
-                if (!token) {
-                    console.error("No token found. Please log in first.");
-                    return;
-                }
-                fetch('https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod/update-json', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify(newItem)
-                })
-                    .then(response => response.json())
-                    .then(data => console.log('Success:', data))
-                    .catch(error => console.error('Error:', error));
 
-                // Re-fetch the data from DynamoDB for the up-to-date data                                        still need to refetch to update the page!!!
-                alert(`New chore ${newItem.chore_id} was sucessfully saved!`);
-            });
+                try {
+                    const response = await fetch(
+                        "https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod/update-json",
+                        {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${token}`
+                            },
+                            body: JSON.stringify(newChore)
+                        }
+                    );
+
+                    if (!response.ok) throw new Error("Failed to save chore");
+                    const result = await response.json();
+                    console.log("Success saving new chore:", result);
+
+                    showToast(`New chore ${newChore.chore_id} was successfully saved ✅`);
+
+                    // Refresh UI with latest data
+                    refreshUI()
+
+                } catch (error) {
+                    console.error("Error:", error);
+                    showToast("Error saving chore ❌");
+                }
+            };
         }
 
         function renderAnalytics(completedChores) {
@@ -784,7 +805,8 @@
             // Fetch data from DynamoDB
             if (token) {
                 localStorage.setItem("idToken", token);
-                fetchData();
+                await fetchData();
+                refreshUI();
             } else {
                 alert("Please login first!");
                 return;
@@ -799,13 +821,12 @@
             });
         }
 
+        //-----------------------------------------------End of all functions-------------------------------------------
         // Running the main function and global references
         let choresByPersonChart = null;
         let choresOverTimeChart = null;
         let avgCompletionChart = null;
         init();
-
-
     </script>
 </body>
 
