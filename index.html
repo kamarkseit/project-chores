@@ -473,7 +473,7 @@
             // --- Populate participant dropdown ---
             const select = document.getElementById("participant-select");
             select.innerHTML = '<option value="">------Select------</option>'; // reset
-            const participants = [...new Set(data.map(entry => entry.assigned_to))];
+            const participants = [...new Set(completedChores.map(entry => entry.assigned_to))];
 
             participants.forEach(name => {
                 const option = document.createElement("option");
@@ -485,7 +485,7 @@
             // Attach listener once
             select.onchange = () => {
                 const selected = select.value;
-                showJobsForParticipant(data, selected);
+                showJobsForParticipant(completedChores, selected);
             };
 
             // --- Analytics section logic ---
