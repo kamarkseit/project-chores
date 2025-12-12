@@ -322,7 +322,7 @@
                     document.getElementById("choresByPerson").classList.remove("spinner-border");
                     document.getElementById("choresOverTime").classList.remove("spinner-border");
                     document.getElementById("avgCompletion").classList.remove("spinner-border");
-                    //await pollForResults();
+                    pollForResults(currentChores, completedChores);
                 }
             } catch (err) {
                 console.log("Error fetching data.");
@@ -401,8 +401,7 @@
             // Re-fetch the data from DynamoDB for the up-to-date data
             showToast("Chore marked complete ✅");
             try {
-                await fetchData();
-                await pollForResults();
+                fetchData();
             } catch (err) {
                 console.log("Error fetching data and polling in markComplete");
             }
@@ -433,9 +432,10 @@
             });
         }
 
-        async function pollForResults() {
-            const stored = localStorage.getItem("currentChores");
-            const data = stored ? JSON.parse(stored) : [];
+        async function pollForResults(currentChores, completedChores) {
+            // const stored = localStorage.getItem("currentChores");
+            // const data = stored ? JSON.parse(stored) : [];
+            const data = currentChores;
 
             // Find today's date, month, and year.
             const now = new Date();
@@ -508,8 +508,8 @@
             // Analytics section logic
 
             // Load completed chores from localStorage
-            const storedCompleted = localStorage.getItem("completedChores");
-            const completedChores = storedCompleted ? JSON.parse(storedCompleted) : [];
+            // const storedCompleted = localStorage.getItem("completedChores");
+            // const completedChores = storedCompleted ? JSON.parse(storedCompleted) : [];
             renderAnalytics(completedChores);
 
             // Update Family Chore List Section
@@ -784,8 +784,7 @@
             // Fetch data from DynamoDB
             if (token) {
                 localStorage.setItem("idToken", token);
-                await fetchData();
-                pollForResults();
+                fetchData();
             } else {
                 alert("Please login first!");
                 return;
