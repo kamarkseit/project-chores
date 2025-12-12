@@ -441,12 +441,12 @@
             const history_log = [];
 
             completedChores.forEach(entry => {
-                const completedDate = new Date(entry.last_completed + "T00:00:00Z");
+                const completedDate = new Date(entry.completed_on + "T00:00:00Z");
                 if (
                     completedDate.getUTCMonth() === currentMonth &&
                     completedDate.getUTCFullYear() === currentYear
                 ) {
-                    history_log.push(`${entry.last_completed}: ${entry.chore_name} by ${entry.assigned_to}`);
+                    history_log.push(`${entry.completed_on}: ${entry.chore_name} by ${entry.assigned_to}`);
                 }
             });
 
