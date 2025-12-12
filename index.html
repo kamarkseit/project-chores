@@ -266,6 +266,19 @@
 
 
     <script>
+        // Toast message function
+        function showToast(message) {
+            const toast = document.createElement("div");
+            toast.className = "toast align-items-center text-bg-success border-0 show";
+            toast.role = "alert";
+            toast.innerHTML = `<div class="d-flex">
+            <div class="toast-body">${message}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
         // Get token from API Gateway and Cognito
         function getTokenFromUrl() {
             const hash = window.location.hash;
@@ -307,13 +320,13 @@
                     document.getElementById("choresByPerson").classList.remove("spinner-border");
                     document.getElementById("choresOverTime").classList.remove("spinner-border");
                     document.getElementById("avgCompletion").classList.remove("spinner-border");
-                    pollForResults();
+                    await pollForResults();
                 }
             } catch (err) {
                 console.log("Error fetching data.");
             }
         }
-        // Gets the token and fetchs json data 
+        // Gets the token and fetchs json data                          Should I rename this function?????
         async function ensureLocalChores() {
             localStorage.removeItem("currentChores");
             localStorage.removeItem("completedChores");
@@ -384,7 +397,7 @@
                 .catch(error => console.error('Error:', error));
 
             // Re-fetch the data from DynamoDB for the up-to-date data
-            alert(`Job ${jobId} updated!`);
+            showToast("Chore marked complete ✅");
             fetchData();
             // ???? May need to automatically reload the page here ????
         }
