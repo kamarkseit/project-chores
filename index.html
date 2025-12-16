@@ -402,6 +402,9 @@
             showToast("Chore marked complete ✅");
             await fetchData();
             refreshUI();
+            // Close and clear the form
+            e.target.reset();
+            document.getElementById("job-update-area").innerHTML = "";
         }
 
         function showJobsForParticipant(data, name) {
@@ -474,7 +477,6 @@
 
 
             // --- Populate participant dropdown ---
-            console.log(currentChores)
             const select = document.getElementById("participant-select");
             select.innerHTML = '<option value="">------Select------</option>'; // reset
             const participants = [...new Set(currentChores.map(entry => entry.assigned_to))];
