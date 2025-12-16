@@ -400,9 +400,7 @@
 
             // Re-fetch the data from DynamoDB for the up-to-date data
             showToast("Chore marked complete ✅");
-            document.getElementById("job-update-area").innerHTML = "";
-            // await fetchData();
-            // refreshUI();
+            refreshUI();
         }
 
         function showJobsForParticipant(data, name) {
@@ -580,8 +578,7 @@
                     showToast(`Chore ${chore.chore_id} was successfully updated ✅`);
 
                     // Refresh UI with latest data
-                    const { currentChores, completedChores } = await fetchData();
-                    pollForResults(currentChores, completedChores);
+                    refreshUI()
 
                 } catch (error) {
                     console.error("Error:", error);
@@ -643,8 +640,7 @@
                     showToast(`Chore ${chore.chore_id} was successfully deleted ✅`);
 
                     // Refresh UI with latest data
-                    const { currentChores, completedChores } = await fetchData();
-                    pollForResults(currentChores, completedChores);
+                    refreshUI()
 
                 } catch (error) {
                     console.error("Error:", error);
