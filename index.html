@@ -400,9 +400,9 @@
 
             // Re-fetch the data from DynamoDB for the up-to-date data
             showToast("Chore marked complete ✅");
+            document.getElementById("job-update-area").innerHTML = "";
             // await fetchData();
             // refreshUI();
-            // document.getElementById("job-update-area").innerHTML = "";
         }
 
         function showJobsForParticipant(data, name) {
