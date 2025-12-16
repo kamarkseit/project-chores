@@ -300,8 +300,8 @@
             let completedChores = [];
 
             try {
-                // document.getElementById("history-log").classList.add("spinner-border");
-                // document.getElementById("due-chores-log").classList.add("spinner-border");
+                document.getElementById("history-log").classList.add("spinner-border");
+                document.getElementById("due-chores-log").classList.add("spinner-border");
                 // document.getElementById("choresByPerson").classList.add("spinner-border");
                 // document.getElementById("choresOverTime").classList.add("spinner-border");
                 // document.getElementById("avgCompletion").classList.add("spinner-border");
@@ -324,8 +324,8 @@
                     localStorage.setItem("currentChores", JSON.stringify(currentChores));
                     localStorage.setItem("completedChores", JSON.stringify(completedChores));
 
-                    // document.getElementById("history-log").classList.remove("spinner-border");
-                    // document.getElementById("due-chores-log").classList.remove("spinner-border");
+                    document.getElementById("history-log").classList.remove("spinner-border");
+                    document.getElementById("due-chores-log").classList.remove("spinner-border");
                     // document.getElementById("choresByPerson").classList.remove("spinner-border");
                     // document.getElementById("choresOverTime").classList.remove("spinner-border");
                     // document.getElementById("avgCompletion").classList.remove("spinner-border");
@@ -400,7 +400,7 @@
 
             // Re-fetch the data from DynamoDB for the up-to-date data
             showToast("Chore marked complete ✅");
-            refreshUI();
+            await refreshUI();
         }
 
         function showJobsForParticipant(data, name) {
