@@ -587,7 +587,7 @@
                     console.error("Error:", error);
                     showToast("Error updating chore ❌");
                 }
-                const modalEl = document.getElementById('updateChoreForm');
+                const modalEl = document.getElementById('updateChoreModal');
                 const modal = bootstrap.Modal.getInstance(modalEl);
                 modal.hide();
             };
@@ -648,7 +648,7 @@
                     console.error("Error:", error);
                     showToast("Error deleting chore ❌");
                 }
-                const modalEl = document.getElementById('updateChoreForm');
+                const modalEl = document.getElementById('updateChoreModal');
                 const modal = bootstrap.Modal.getInstance(modalEl);
                 modal.hide();
             };
@@ -711,7 +711,7 @@
                     console.error("Error:", error);
                     showToast("Error saving chore ❌");
                 }
-                const modalEl = document.getElementById('addChoreForm');
+                const modalEl = document.getElementById('addChoreModal');
                 const modal = bootstrap.Modal.getInstance(modalEl);
                 modal.hide();
             };
