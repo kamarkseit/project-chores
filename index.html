@@ -383,26 +383,37 @@
             const updatedItem = updated.find(entry => entry.chore_id === jobId);
 
             // Send updated data to API
-            const token = new URLSearchParams(window.location.hash.substring(1)).get('id_token') // later can utilize the function for the token ????
+            // const token = new URLSearchParams(window.location.hash.substring(1)).get('id_token') // later can utilize the function for the token ????
+            // if (!token) {
+            //     console.error("No token found. Please log in first.");
+            //     return;
+            // }
+            const token = localStorage.getItem('idToken');
             if (!token) {
-                console.error("No token found. Please log in first.");
+                alert("Please log in to mark chores complete.");
                 return;
             }
-            fetch('https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod/update-json', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(updatedItem) //11052025: updated -> updatedItem.
-            })
-                .then(response => response.json())
-                .then(data => console.log('Success:', data))
-                .catch(error => console.error('Error:', error));
 
-            // Re-fetch the data from DynamoDB for the up-to-date data
-            showToast("Chore marked complete ✅");
-            await refreshUI();
+            try {
+                const response = await fetch('https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod/update-json', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(updatedItem)
+                });
+
+                const result = await response.json();
+                console.log('Success:', result);
+
+                showToast("Chore marked complete ✅");
+
+                // Now refresh after the update has finished
+                await refreshUI();
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
 
         function showJobsForParticipant(data, name) {
