@@ -340,7 +340,9 @@
         // Refreshing User Interface function
         async function refreshUI() {
             const { currentChores, completedChores } = await fetchData();
+            console.log(currentChores, completedChores)
             pollForResults(currentChores, completedChores);
+            console.log("refreshUI did run")
         }
 
         // Function is used to modify data and send it to S3 using API Gateway
