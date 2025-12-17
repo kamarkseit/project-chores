@@ -424,9 +424,11 @@
                 console.log('Success:', result);
 
                 showToast("Chore marked complete ✅");
-
                 // Now refresh after the update has finished
-                await refreshUI();
+                setTimeout(() => {
+                    refreshUI();
+                }, 2000);
+
             } catch (error) {
                 console.error('Error:', error);
             }
