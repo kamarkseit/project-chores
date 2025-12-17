@@ -317,10 +317,15 @@
 
             try {
                 document.getElementById("history-log").classList.add("spinner-border");
+                document.getElementById("history-log").innerText = "";
                 document.getElementById("due-chores-log").classList.add("spinner-border");
-                // document.getElementById("choresByPerson").classList.add("spinner-border");
-                // document.getElementById("choresOverTime").classList.add("spinner-border");
-                // document.getElementById("avgCompletion").classList.add("spinner-border");
+                document.getElementById("due-chores-log").innerText = "";
+                document.getElementById("choresByPerson").classList.add("spinner-border");
+                document.getElementById("choresByPerson").innerText = "";
+                document.getElementById("choresOverTime").classList.add("spinner-border");
+                document.getElementById("choresOverTime").innerText = "";
+                document.getElementById("avgCompletion").classList.add("spinner-border");
+                document.getElementById("avgCompletion").innerText = "";
                 const response = await fetch("https://d75p3zw6y5.execute-api.us-east-2.amazonaws.com/prod/update-json", {
                     method: "GET",
                     headers: {
