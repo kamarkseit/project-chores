@@ -266,31 +266,33 @@
 
 
     <script>
-        // Toast message function
+        // --- Toast message function ---
         function showToast(message) {
+            const container = document.querySelector(".toast-container")
+                || (() => {
+                    const c = document.createElement("div");
+                    c.className = "toast-container position-fixed bottom-0 end-0 p-3";
+                    document.body.appendChild(c);
+                    return c;
+                })();
+
             const toast = document.createElement("div");
             toast.className = "toast align-items-center text-bg-success border-0";
             toast.role = "alert";
             toast.innerHTML = `
-            <div class="d-flex">
-            <div class="toast-body">${message}</div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-            </div>`;
+                <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>`;
 
-            document.body.appendChild(toast);
+            container.appendChild(toast);
 
             // Initialize and show using Bootstrap’s API
             const bsToast = new bootstrap.Toast(toast, { delay: 3000 });
             bsToast.show();
 
-            // Remove after hidden
-            toast.addEventListener('hidden.bs.toast', () => toast.remove());
-        }
-
-        // Get token from API Gateway and Cognito
-        function getTokenFromUrl() {
-            const hash = window.location.hash;
-            return new URLSearchParams(hash.substring(1)).get('id_token');
+            // Clean up after hidden
+            toast.addEventListener("hidden.bs.toast", () => toast.remove());
         }
 
         // Fetch json data that is stored in DynamoDB using API Gateway and Cognito
