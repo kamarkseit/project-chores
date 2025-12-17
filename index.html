@@ -151,8 +151,7 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label for="dueDate" class="form-label">Due Date</label>
-                                            <input type="date" class="form-control" id="dueDate" name="dueDate"
-                                                required>
+                                            <input type="date" class="form-control" id="dueDate" name="dueDate">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="interval" class="form-label">Interval Days</label>
@@ -219,8 +218,7 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label for="dueDateNew" class="form-label">Due Date</label>
-                                            <input type="date" class="form-control" id="dueDateNew" name="dueDateNew"
-                                                required>
+                                            <input type="date" class="form-control" id="dueDateNew" name="dueDateNew">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="intervalNew" class="form-label">Interval Days</label>
@@ -539,14 +537,14 @@
             }
 
             // Restrict due date to tomorrow or later
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            const yyyy = tomorrow.getFullYear();
-            const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
-            const dd = String(tomorrow.getDate()).padStart(2, '0');
-            const minDate = `${yyyy}-${mm}-${dd}`;
-            document.getElementById("dueDate").setAttribute("min", minDate);
-            document.getElementById("dueDateNew").setAttribute("min", minDate);
+            // const tomorrow = new Date();
+            // tomorrow.setDate(tomorrow.getDate() + 1);
+            // const yyyy = tomorrow.getFullYear();
+            // const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            // const dd = String(tomorrow.getDate()).padStart(2, '0');
+            // const minDate = `${yyyy}-${mm}-${dd}`;
+            // document.getElementById("dueDate").setAttribute("min", minDate);
+            // document.getElementById("dueDateNew").setAttribute("min", minDate);
 
             // Load chores from localStorage
             const stored = localStorage.getItem("currentChores");
