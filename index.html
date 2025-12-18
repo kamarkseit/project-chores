@@ -855,7 +855,18 @@
             });
         }
 
-        // Main function is here
+        // --- Function to handle expired token ---
+        function isTokenExpired(token) {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                const now = Math.floor(Date.now() / 1000);
+                return payload.exp < now;
+            } catch (e) {
+                return true; // treat invalid token as expired
+            }
+        }
+
+        // --- Main function is here ---
         async function init() {
             // Clear local storage just in case
             localStorage.removeItem('idToken');
@@ -863,8 +874,9 @@
             localStorage.removeItem("completedChores");
             // Get the token and save it to local
             const token = getTokenFromUrl();
-            if (!token) {
+            if (!token || isTokenExpired(token)) {
                 alert("Please login first!");
+                window.location.href = 'https://kamarkseit.github.io/project-chores/';
                 return;
             }
             localStorage.setItem("idToken", token);
